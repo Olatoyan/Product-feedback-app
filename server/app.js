@@ -3,6 +3,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const AppError = require("./utils/appError");
 const userRouter = require("./routes/userRoutes");
+const productRouter = require("./routes/productsRoutes");
 // const linkRouter = require("./routes/linkRoutes");
 const globalErrorHandler = require("./controllers/errorController");
 // const helmet = require("helmet");
@@ -35,7 +36,7 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 // // Data Sanitization against XSS
 // app.use(xss());
 
-app.use("/product-api/user", userRouter);
+app.use("/product-api/user", userRouter, productRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
