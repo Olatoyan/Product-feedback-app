@@ -73,3 +73,32 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+exports.editProduct = catchAsync(async (req, res, next) => {
+  const { title, category, detail, status } = req.body;
+
+  if (!title || !category || !detail || !status) {
+    return next(new AppError("Please provide all required fields", 400));
+  }
+
+  const updatedProduct = await Product.findByIdAndUpdate(
+    req.query.id,
+    {
+      title,
+      category,
+      description: detail,
+      status,
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      product: updatedProduct,
+    },
+  });
+});
