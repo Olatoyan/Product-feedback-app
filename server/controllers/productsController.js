@@ -1,5 +1,6 @@
 const Product = require("../models/productModel");
 const catchAsync = require("./../utils/catchAsync");
+const AppError = require("./../utils/appError");
 
 exports.getAllProducts = catchAsync(async (req, res, next) => {
   console.log(req.query);
@@ -46,6 +47,29 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
     results: products.length,
     data: {
       products,
+    },
+  });
+});
+
+exports.createProduct = catchAsync(async (req, res, next) => {
+  const { title, category, detail } = req.body;
+
+  if (!title || !category || !detail) {
+    return next(
+      new AppError("Either title, category or detail is missing", 400)
+    );
+  }
+
+  const newProduct = await Product.create({
+    title,
+    category,
+    description: detail,
+  });
+
+  res.status(201).json({
+    status: "success",
+    data: {
+      product: newProduct,
     },
   });
 });
