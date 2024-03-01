@@ -1,8 +1,15 @@
 import { Link } from "react-router-dom";
 import SidebarCategories from "./SidebarCategories";
 import SidebarRoadmap from "./SidebarRoadmap";
+import { useState } from "react";
 
 function Sidebar() {
+  const [checkCategory, setCheckCategory] = useState("All");
+
+  function handleChangeCategory(value: string) {
+    setCheckCategory(value);
+  }
+
   return (
     <aside className="max-w-[25.5rem] space-y-[2.4rem]">
       <div className="bg-suggestion-desktop flex h-[13.7rem] flex-col justify-end rounded-[1rem] bg-cover pb-6 pl-6">
@@ -15,12 +22,36 @@ function Sidebar() {
       </div>
 
       <div className="flex flex-wrap items-center gap-x-[0.8rem] gap-y-8 rounded-[1rem] bg-white p-[2.4rem]">
-        <SidebarCategories category="All" />
-        <SidebarCategories category="UI" />
-        <SidebarCategories category="UX" />
-        <SidebarCategories category="Enhancement" />
-        <SidebarCategories category="Bug" />
-        <SidebarCategories category="Feature" />
+        <SidebarCategories
+          category="All"
+          checkCategory={checkCategory}
+          handleChangeCategory={handleChangeCategory}
+        />
+        <SidebarCategories
+          category="UI"
+          checkCategory={checkCategory}
+          handleChangeCategory={handleChangeCategory}
+        />
+        <SidebarCategories
+          category="UX"
+          checkCategory={checkCategory}
+          handleChangeCategory={handleChangeCategory}
+        />
+        <SidebarCategories
+          category="Enhancement"
+          checkCategory={checkCategory}
+          handleChangeCategory={handleChangeCategory}
+        />
+        <SidebarCategories
+          category="Bug"
+          checkCategory={checkCategory}
+          handleChangeCategory={handleChangeCategory}
+        />
+        <SidebarCategories
+          category="Feature"
+          checkCategory={checkCategory}
+          handleChangeCategory={handleChangeCategory}
+        />
       </div>
 
       <div className="rounded-[1rem] bg-white p-[2.4rem]">
@@ -29,7 +60,7 @@ function Sidebar() {
             Roadmap
           </h3>
           <Link
-            className="text-[1.3rem] font-semibold text-[#4661e6] underline"
+            className="text-[1.3rem] font-semibold text-[#4661e6] underline transition-all duration-300 hover:text-[#8397fb]"
             to="/roadmap"
           >
             View
