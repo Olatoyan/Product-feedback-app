@@ -1,23 +1,15 @@
 import { Link } from "react-router-dom";
 import SidebarCategories from "./SidebarCategories";
 import SidebarRoadmap from "./SidebarRoadmap";
-import { useState } from "react";
+
 import { productType } from "../../types/types";
 
-function Sidebar({ getFeedbacks }: { getFeedbacks: productType[] }) {
-  const [checkCategory, setCheckCategory] = useState("All");
-
-  console.log(getFeedbacks);
-
-  const liveData = getFeedbacks.filter((data) => data.status === "live");
-  const plannedData = getFeedbacks.filter((data) => data.status === "planned");
-  const inProgressData = getFeedbacks.filter(
+function Sidebar({ allFeedbacks }: { allFeedbacks: productType[] }) {
+  const liveData = allFeedbacks.filter((data) => data.status === "live");
+  const plannedData = allFeedbacks.filter((data) => data.status === "planned");
+  const inProgressData = allFeedbacks.filter(
     (data) => data.status === "in-progress",
   );
-
-  function handleChangeCategory(value: string) {
-    setCheckCategory(value);
-  }
 
   return (
     <aside className="max-w-[25.5rem] space-y-[2.4rem]">
@@ -31,36 +23,12 @@ function Sidebar({ getFeedbacks }: { getFeedbacks: productType[] }) {
       </div>
 
       <div className="flex flex-wrap items-center gap-x-[0.8rem] gap-y-8 rounded-[1rem] bg-white p-[2.4rem]">
-        <SidebarCategories
-          category="All"
-          checkCategory={checkCategory}
-          handleChangeCategory={handleChangeCategory}
-        />
-        <SidebarCategories
-          category="UI"
-          checkCategory={checkCategory}
-          handleChangeCategory={handleChangeCategory}
-        />
-        <SidebarCategories
-          category="UX"
-          checkCategory={checkCategory}
-          handleChangeCategory={handleChangeCategory}
-        />
-        <SidebarCategories
-          category="Enhancement"
-          checkCategory={checkCategory}
-          handleChangeCategory={handleChangeCategory}
-        />
-        <SidebarCategories
-          category="Bug"
-          checkCategory={checkCategory}
-          handleChangeCategory={handleChangeCategory}
-        />
-        <SidebarCategories
-          category="Feature"
-          checkCategory={checkCategory}
-          handleChangeCategory={handleChangeCategory}
-        />
+        <SidebarCategories category="All" />
+        <SidebarCategories category="UI" />
+        <SidebarCategories category="UX" />
+        <SidebarCategories category="Enhancement" />
+        <SidebarCategories category="Bug" />
+        <SidebarCategories category="Feature" />
       </div>
 
       <div className="rounded-[1rem] bg-white p-[2.4rem]">

@@ -2,37 +2,61 @@ const Product = require("../models/productModel");
 const catchAsync = require("./../utils/catchAsync");
 const AppError = require("./../utils/appError");
 
+exports.getAllProducts = catchAsync(async (req, res, next) => {
+  const products = await Product.find()
+    .populate({
+      path: "comments",
+      select: "-__v",
+      populate: [
+        { path: "user", select: "-__v" },
+        {
+          path: "replies",
+          select: "-__v",
+          populate: { path: "user", select: "-__v" },
+        },
+      ],
+    })
+    .select("-__v");
+
+  res.status(200).json({
+    status: "success",
+    results: products.length,
+    data: {
+      products,
+    },
+  });
+});
+
 exports.getAllSuggestedProducts = catchAsync(async (req, res, next) => {
   console.log(req.query);
   console.log(req.query.category);
 
-  let query = Product.find().sort({ comments: -1 });
+  let query = Product.find().where("status").equals("suggestion");
 
   if (req.query.category && req.query.category !== "all") {
     query = query.where("category").equals(req.query.category);
   }
 
-  if (req.query.category === "all") {
-    query = query.where("category");
+  let sortBy = {};
+
+  if (req.query.sortBy === "most-upvotes") {
+    sortBy = { upvotes: -1 };
   }
 
-  if (req.query.sort === "most-upvotes") {
-    query = query.sort({ upvotes: -1 });
+  if (req.query.sortBy === "least-upvotes") {
+    sortBy = { upvotes: 1 };
   }
 
-  if (req.query.sort === "least-upvotes") {
-    query = query.sort({ upvotes: 1 });
+  if (req.query.sortBy === "most-comments") {
+    sortBy = { comments: -1 };
   }
 
-  if (req.query.sort === "most-comments") {
-    query = query.sort({ comments: -1 });
-  }
-
-  if (req.query.sort === "least-comments") {
-    query = query.sort({ comments: 1 });
+  if (req.query.sortBy === "least-comments") {
+    sortBy = { comments: 1 };
   }
 
   const products = await query
+    .sort(sortBy)
     .populate({
       path: "comments",
       select: "-__v",

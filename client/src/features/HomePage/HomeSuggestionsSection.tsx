@@ -5,12 +5,18 @@ import { HiPlusSmall } from "react-icons/hi2";
 import { FaCheck } from "react-icons/fa6";
 
 import { motion, AnimatePresence } from "framer-motion";
-import {  useState } from "react";
+import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { productType } from "../../types/types";
+import EmptySuggestions from "./EmptySuggestions";
 
-function HomeSuggestionsSection() {
-  const [searchParams ] = useSearchParams();
-
+function HomeSuggestionsSection({
+  getSuggestedFeedbacks,
+}: {
+  getSuggestedFeedbacks: productType[];
+}) {
+  console.log(getSuggestedFeedbacks);
+  const [searchParams] = useSearchParams();
 
   const isCategoryInQuery = searchParams.get("category");
   const sortQuery = searchParams.get("sortBy");
@@ -46,7 +52,7 @@ function HomeSuggestionsSection() {
             alt="suggestions icon"
           />
           <h2 className="text-[1.8rem] font-bold tracking-[-0.025rem] text-white">
-            6 Suggestions
+            {getSuggestedFeedbacks.length} Suggestions
           </h2>
         </div>
 
@@ -132,12 +138,15 @@ function HomeSuggestionsSection() {
         </button>
       </header>
 
-      <div className="flex flex-col gap-8 pt-[2.4rem]">
-        <HomeSuggestionBox />
-        <HomeSuggestionBox />
-        <HomeSuggestionBox />
-        <HomeSuggestionBox />
-      </div>
+      {getSuggestedFeedbacks.length > 0 ? (
+        <div className="flex flex-col gap-8 pt-[2.4rem]">
+          {getSuggestedFeedbacks.map((feedback) => (
+            <HomeSuggestionBox key={feedback._id} feedback={feedback} />
+          ))}
+        </div>
+      ) : (
+        <EmptySuggestions />
+      )}
     </section>
   );
 }

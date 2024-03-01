@@ -1,25 +1,32 @@
 import { useSearchParams } from "react-router-dom";
 import HomeSuggestionsSection from "./HomeSuggestionsSection";
 import Sidebar from "./Sidebar";
-import { useGetFeedbacks } from "./useGetFeedbacks";
+import { useGetSuggestedFeedbacks } from "./useGetSuggestedFeedbacks";
 import { useEffect } from "react";
+import { useGetAllFeedbacks } from "./useGetAllFeedbacks";
 
 function HomePage() {
-  const { getFeedbacks, isPendingGetFeedbacks } = useGetFeedbacks();
+  const { getSuggestedFeedbacks, isPendingGetFeedbacks } =
+    useGetSuggestedFeedbacks();
+  const { allFeedbacks, isAllFeedbackPending } = useGetAllFeedbacks();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    setSearchParams({ category: "all", sortBy: "most-upvotes" });
-  }, [setSearchParams]);
+    const categoryQuery = searchParams.get("category");
+    const isSortInQuery = searchParams.get("sortBy");
 
-  if (isPendingGetFeedbacks)
+    if (!categoryQuery && !isSortInQuery)
+      setSearchParams({ category: "all", sortBy: "most-upvotes" });
+  }, [setSearchParams, searchParams]);
+
+  if (isPendingGetFeedbacks || isAllFeedbackPending)
     return <p>Loading...............................</p>;
 
   return (
     <div className="grid grid-cols-[auto_1fr] gap-12 p-16">
-      <Sidebar getFeedbacks={getFeedbacks} />
-      <HomeSuggestionsSection />
+      <Sidebar allFeedbacks={allFeedbacks} />
+      <HomeSuggestionsSection getSuggestedFeedbacks={getSuggestedFeedbacks} />
     </div>
   );
 }
