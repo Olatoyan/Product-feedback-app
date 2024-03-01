@@ -2,9 +2,18 @@ import { Link } from "react-router-dom";
 import SidebarCategories from "./SidebarCategories";
 import SidebarRoadmap from "./SidebarRoadmap";
 import { useState } from "react";
+import { productType } from "../../types/types";
 
-function Sidebar() {
+function Sidebar({ getFeedbacks }: { getFeedbacks: productType[] }) {
   const [checkCategory, setCheckCategory] = useState("All");
+
+  console.log(getFeedbacks);
+
+  const liveData = getFeedbacks.filter((data) => data.status === "live");
+  const plannedData = getFeedbacks.filter((data) => data.status === "planned");
+  const inProgressData = getFeedbacks.filter(
+    (data) => data.status === "in-progress",
+  );
 
   function handleChangeCategory(value: string) {
     setCheckCategory(value);
@@ -12,7 +21,7 @@ function Sidebar() {
 
   return (
     <aside className="max-w-[25.5rem] space-y-[2.4rem]">
-      <div className="bg-suggestion-desktop flex h-[13.7rem] flex-col justify-end rounded-[1rem] bg-cover pb-6 pl-6">
+      <div className="flex h-[13.7rem] flex-col justify-end rounded-[1rem] bg-suggestion-desktop bg-cover pb-6 pl-6">
         <h1 className="text-[2rem] font-bold tracking-[-0.025rem] text-white">
           Frontend Mentor
         </h1>
@@ -67,9 +76,9 @@ function Sidebar() {
           </Link>
         </div>
         <div className="flex flex-col gap-[0.8rem]">
-          <SidebarRoadmap status="Planned" number={2} />
-          <SidebarRoadmap status="In-Progress" number={3} />
-          <SidebarRoadmap status="Live" number={1} />
+          <SidebarRoadmap status="Planned" number={plannedData.length} />
+          <SidebarRoadmap status="In-Progress" number={inProgressData.length} />
+          <SidebarRoadmap status="Live" number={liveData.length} />
         </div>
       </div>
     </aside>

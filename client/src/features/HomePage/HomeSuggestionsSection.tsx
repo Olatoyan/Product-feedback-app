@@ -5,15 +5,36 @@ import { HiPlusSmall } from "react-icons/hi2";
 import { FaCheck } from "react-icons/fa6";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import {  useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 
 function HomeSuggestionsSection() {
+  const [searchParams ] = useSearchParams();
+
+
+  const isCategoryInQuery = searchParams.get("category");
+  const sortQuery = searchParams.get("sortBy");
+
   const [isOpen, setIsOpen] = useState(false);
-  const [sortBy, setIsSortBy] = useState("Most upvotes");
+  const [sortBy, setIsSortBy] = useState(sortQuery || "most-upvotes");
 
   function handleClickSortBy(value: string) {
     setIsOpen(!isOpen);
     setIsSortBy(value);
+  }
+
+  function handleQueryString(value: string) {
+    return isCategoryInQuery
+      ? `?category=${isCategoryInQuery}&sortBy=${value}`
+      : `?sortBy=${value}`;
+  }
+
+  function unSlugify(text: string) {
+    return text
+      .replace(/-/g, " ")
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
   }
 
   return (
@@ -35,7 +56,7 @@ function HomeSuggestionsSection() {
         >
           <p className="text-[1.4rem] text-[#f2f4fe]">Sort by</p>
           <button className="flex items-center gap-2 text-[#f2f4fe]">
-            <span className="text-[1.4rem] font-bold">{sortBy}</span>
+            <span className="text-[1.4rem] font-bold">{unSlugify(sortBy)}</span>
             <RiArrowDownSLine size={"2rem"} />
           </button>
 
@@ -52,50 +73,54 @@ function HomeSuggestionsSection() {
                 }}
                 className="absolute top-[6rem] w-[22rem] divide-y-[1px] divide-[#3a4374] divide-opacity-15 rounded-[1rem] bg-white shadow-modal-sh"
               >
-                <div
+                <Link
+                  to={handleQueryString("most-upvotes")}
                   className="flex items-center justify-between px-[2.4rem] py-[1.2rem]"
-                  onClick={handleClickSortBy.bind(null, "Most upvotes")}
+                  onClick={handleClickSortBy.bind(null, "most-upvotes")}
                 >
                   <p className="cursor-pointer text-[1.6rem] text-[#647196] transition-all duration-300 hover:text-[#ad1fea]">
-                    Most upvotes
+                    Most Upvotes
                   </p>
-                  {sortBy === "Most upvotes" && (
+                  {sortBy === "most-upvotes" && (
                     <FaCheck color="#ad1fea" size={"1.5rem"} />
                   )}
-                </div>
-                <div
+                </Link>
+                <Link
+                  to={handleQueryString("least-upvotes")}
                   className="flex items-center justify-between px-[2.4rem] py-[1.2rem]"
-                  onClick={handleClickSortBy.bind(null, "Least upvotes")}
+                  onClick={handleClickSortBy.bind(null, "least-upvotes")}
                 >
                   <p className="cursor-pointer text-[1.6rem] text-[#647196] transition-all duration-300 hover:text-[#ad1fea]">
-                    Least upvotes
+                    Least Upvotes
                   </p>
-                  {sortBy === "Least upvotes" && (
+                  {sortBy === "least-upvotes" && (
                     <FaCheck color="#ad1fea" size={"1.5rem"} />
                   )}
-                </div>
-                <div
+                </Link>
+                <Link
+                  to={handleQueryString("most-comments")}
                   className="flex items-center justify-between px-[2.4rem] py-[1.2rem]"
-                  onClick={handleClickSortBy.bind(null, "Most comments")}
+                  onClick={handleClickSortBy.bind(null, "most-comments")}
                 >
                   <p className="cursor-pointer text-[1.6rem] text-[#647196] transition-all duration-300 hover:text-[#ad1fea]">
                     Most Comments
                   </p>
-                  {sortBy === "Most comments" && (
+                  {sortBy === "most-comments" && (
                     <FaCheck color="#ad1fea" size={"1.5rem"} />
                   )}
-                </div>
-                <div
+                </Link>
+                <Link
+                  to={handleQueryString("least-comments")}
                   className="flex items-center justify-between px-[2.4rem] py-[1.2rem]"
-                  onClick={handleClickSortBy.bind(null, "Least comments")}
+                  onClick={handleClickSortBy.bind(null, "least-comments")}
                 >
                   <p className="cursor-pointer text-[1.6rem] text-[#647196] transition-all duration-300 hover:text-[#ad1fea]">
                     Least Comments
                   </p>
-                  {sortBy === "Least comments" && (
+                  {sortBy === "least-comments" && (
                     <FaCheck color="#ad1fea" size={"1.5rem"} />
                   )}
-                </div>
+                </Link>
               </motion.div>
             )}
           </AnimatePresence>

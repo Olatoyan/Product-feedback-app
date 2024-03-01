@@ -2,13 +2,18 @@ const Product = require("../models/productModel");
 const catchAsync = require("./../utils/catchAsync");
 const AppError = require("./../utils/appError");
 
-exports.getAllProducts = catchAsync(async (req, res, next) => {
+exports.getAllSuggestedProducts = catchAsync(async (req, res, next) => {
   console.log(req.query);
+  console.log(req.query.category);
 
-  let query = Product.find();
+  let query = Product.find().sort({ comments: -1 });
 
   if (req.query.category && req.query.category !== "all") {
     query = query.where("category").equals(req.query.category);
+  }
+
+  if (req.query.category === "all") {
+    query = query.where("category");
   }
 
   if (req.query.sort === "most-upvotes") {
