@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import HomePage from "./features/HomePage/HomePage";
 import CreateFeedback from "./features/HomePage/CreateFeedback";
 import EditFeedback from "./features/HomePage/EditFeedback";
+import FeedbackDetail from "./features/FeedbackDetail/FeedbackDetail";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,6 +22,10 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="create-feedback" element={<CreateFeedback />} />
         <Route path="edit-feedback/:feedbackId" element={<EditFeedback />} />
+        <Route
+          path="feedback-detail/:feedbackId"
+          element={<FeedbackDetail />}
+        />
       </Routes>
     </QueryClientProvider>
   );

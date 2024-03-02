@@ -5,7 +5,7 @@ function NavigateBack() {
   const navigate = useNavigate();
   return (
     <div
-      className="flex cursor-pointer items-center gap-2 pb-28 text-[1.4rem] font-bold text-[#647196]"
+      className="flex cursor-pointer items-center gap-2 text-[1.4rem] font-bold text-[#647196]"
       onClick={() => navigate(-1)}
     >
       <MdOutlineKeyboardArrowLeft size={"2rem"} />

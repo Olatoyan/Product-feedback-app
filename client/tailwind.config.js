@@ -11,11 +11,11 @@ export default {
       },
       backgroundImage: {
         "suggestion-desktop":
-          "url('./suggestions/desktop/background-header.png')",
+          "url('../suggestions/desktop/background-header.png')",
         "suggestion-tablet":
-          "url('./suggestions/tablet/background-header.png')",
+          "url('../suggestions/tablet/background-header.png')",
         "suggestion-mobile":
-          "url('./suggestions/mobile/background-header.png')",
+          "url('../suggestions/mobile/background-header.png')",
       },
     },
   },

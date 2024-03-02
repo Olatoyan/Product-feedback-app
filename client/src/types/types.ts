@@ -8,14 +8,14 @@ export type productType = {
   comments: commentType[];
 };
 
-type commentType = {
+export type commentType = {
   _id: string;
   content: string;
   user: userType;
   replies: replyType[];
 };
 
-type replyType = {
+export type replyType = {
   _id: string;
   content: string;
   replyingTo: string;

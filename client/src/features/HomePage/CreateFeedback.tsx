@@ -43,7 +43,7 @@ function CreateFeedback() {
       <NavigateBack />
 
       <form
-        className="rounded-[1rem] bg-white p-16"
+        className="mt-28 rounded-[1rem] bg-white p-16"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="-mt-28">

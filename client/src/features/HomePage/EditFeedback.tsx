@@ -41,11 +41,11 @@ function EditFeedback() {
   }
 
   return (
-    <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[58rem] flex-col justify-center">
+    <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[58rem] flex-col justify-center py-8">
       <NavigateBack />
 
       <form
-        className="rounded-[1rem] bg-white p-16"
+        className="mt-28 rounded-[1rem] bg-white p-16"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="-mt-28">
