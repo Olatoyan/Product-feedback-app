@@ -63,7 +63,10 @@ function HomeSuggestionsSection({
           <p className="text-[1.4rem] text-[#f2f4fe]">Sort by</p>
           <button className="flex items-center gap-2 text-[#f2f4fe]">
             <span className="text-[1.4rem] font-bold">{unSlugify(sortBy)}</span>
-            <RiArrowDownSLine size={"2rem"} />
+            <RiArrowDownSLine
+              size={"2rem"}
+              className={`${isOpen ? "rotate-180" : "rotate-0 "} transition-all duration-300 `}
+            />
           </button>
 
           <AnimatePresence>

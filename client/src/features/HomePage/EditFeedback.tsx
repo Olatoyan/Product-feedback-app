@@ -1,29 +1,35 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaCheck } from "react-icons/fa6";
-import { useCreateFeedback } from "./useCreateFeedback";
-import TransparentLoader from "../../ui/TransparentLoader";
 import NavigateBack from "../../ui/NavigateBack";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { FaCheck } from "react-icons/fa6";
 
 type feedbackState = {
   title: string;
   detail: string;
 };
 
-function CreateFeedback() {
+function EditFeedback() {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-  const [category, setCategory] = useState("Feature");
+  const [isStatusOpen, setIsStatusOpen] = useState(false);
 
-  const { createFeedback, isCreatingFeedback } = useCreateFeedback();
+  const [category, setCategory] = useState("Feature");
+  const [status, setStatus] = useState("Planned");
 
   function handleToggleCategory() {
     setIsCategoryOpen((prev) => !prev);
+  }
+  function handleToggleStatus() {
+    setIsStatusOpen((prev) => !prev);
   }
 
   function handleCategoryChange(value: string) {
     setCategory(value);
     setIsCategoryOpen(false);
+  }
+  function handleStatusChange(value: string) {
+    setStatus(value);
+    setIsStatusOpen(false);
   }
 
   const { register, handleSubmit, formState, reset } = useForm<feedbackState>();
@@ -31,11 +37,7 @@ function CreateFeedback() {
   const { errors } = formState;
 
   function onSubmit(data: feedbackState) {
-    createFeedback({
-      title: data.title,
-      category,
-      detail: data.detail,
-    });
+    console.log(data);
   }
 
   return (
@@ -48,14 +50,14 @@ function CreateFeedback() {
       >
         <div className="-mt-28">
           <img
-            src="./shared/icon-new-feedback.svg"
-            alt="new feedback"
+            src="../shared/icon-edit-feedback.svg"
+            alt="edit feedback"
             className="h-[5.6rem] w-[5.6rem]"
           />
         </div>
 
         <h1 className="pt-[2.4rem] text-[2.4rem] font-bold tracking-[-0.0333rem] text-[#3a4374]">
-          Create New Feedback
+          Editing ‘Add a dark theme option’
         </h1>
 
         <div className="space-y-[2.4rem] pt-16">
@@ -71,6 +73,7 @@ function CreateFeedback() {
             <input
               type="text"
               id="title"
+              defaultValue={"Add something here"}
               className={`w-full rounded-[0.5rem] border border-solid bg-[#f7f8fd] px-[2.4rem] py-[1.2rem] text-[1.5rem] text-[#3a4374] ${errors?.title?.message ? "border-[#d73737] focus:border-[#d73737] focus:outline-[#d73737]" : "border-transparent focus:border-[#4661e6] focus:outline-[#4661e6]"}`}
               {...register("title", {
                 required: "Can't be empty",
@@ -105,7 +108,7 @@ function CreateFeedback() {
                 initial={{ rotate: 0 }}
                 animate={{ rotate: isCategoryOpen ? 180 : 0 }}
                 transition={{ type: "spring" }}
-                src="./shared/icon-arrow-down.svg"
+                src="../shared/icon-arrow-down.svg"
                 alt="arrow down"
               />
             </button>
@@ -122,7 +125,7 @@ function CreateFeedback() {
                     ease: "easeInOut",
                     type: "spring",
                   }}
-                  className="absolute top-[12rem] w-full divide-y-[1px] divide-[#3a4374] divide-opacity-15 rounded-[1rem] bg-white shadow-modal-sh"
+                  className="absolute top-[12rem] z-[99] w-full divide-y-[1px] divide-[#3a4374] divide-opacity-15 rounded-[1rem] bg-white shadow-modal-sh"
                 >
                   <div
                     className="flex cursor-pointer items-center justify-between px-[2.4rem] py-[1.2rem] text-[1.6rem] text-[#647196] transition-all duration-300 hover:text-[#ad1fea]"
@@ -173,6 +176,84 @@ function CreateFeedback() {
               )}
             </AnimatePresence>
           </div>
+          <div className="relative">
+            <label className="flex flex-col pb-[1.6rem]">
+              <span className="text-[1.4rem] font-bold tracking-[-0.0194rem] text-[#3a4374]">
+                Update Status
+              </span>
+              <span className="text-[1.4rem] text-[#647196]">
+                Change feature state
+              </span>
+            </label>
+            <button
+              type="button"
+              className="flex w-full items-center justify-between rounded-lg border border-solid border-transparent bg-[#f7f8fd] px-[2.4rem] py-[1.3rem] text-[1.5rem] font-bold text-[#3a4374] focus:border-[#4661e6] focus:outline-[#4661e6]"
+              onClick={handleToggleStatus}
+            >
+              <span>{status}</span>
+              <motion.img
+                initial={{ rotate: 0 }}
+                animate={{ rotate: isStatusOpen ? 180 : 0 }}
+                transition={{ type: "spring" }}
+                src="../shared/icon-arrow-down.svg"
+                alt="arrow down"
+              />
+            </button>
+
+            <AnimatePresence>
+              {isStatusOpen && (
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                  transition={{
+                    duration: 0.2,
+                    damping: 15,
+                    ease: "easeInOut",
+                    type: "spring",
+                  }}
+                  className="absolute top-[12rem] w-full divide-y-[1px] divide-[#3a4374] divide-opacity-15 rounded-[1rem] bg-white shadow-modal-sh"
+                >
+                  <div
+                    className="flex cursor-pointer items-center justify-between px-[2.4rem] py-[1.2rem] text-[1.6rem] text-[#647196] transition-all duration-300 hover:text-[#ad1fea]"
+                    onClick={() => handleStatusChange("Suggestion")}
+                  >
+                    <span>Suggestion</span>
+                    {category === "Suggestion" && (
+                      <FaCheck color="#ad1fea" size={"1.5rem"} />
+                    )}
+                  </div>
+                  <div
+                    className="flex cursor-pointer items-center justify-between px-[2.4rem] py-[1.2rem] text-[1.6rem] text-[#647196] transition-all duration-300 hover:text-[#ad1fea]"
+                    onClick={() => handleStatusChange("Planned")}
+                  >
+                    <span>Planned</span>
+                    {category === "Planned" && (
+                      <FaCheck color="#ad1fea" size={"1.5rem"} />
+                    )}
+                  </div>
+                  <div
+                    className="flex cursor-pointer items-center justify-between px-[2.4rem] py-[1.2rem] text-[1.6rem] text-[#647196] transition-all duration-300 hover:text-[#ad1fea]"
+                    onClick={() => handleStatusChange("In-Progress")}
+                  >
+                    <span>In-Progress</span>
+                    {category === "In-Progress" && (
+                      <FaCheck color="#ad1fea" size={"1.5rem"} />
+                    )}
+                  </div>
+                  <div
+                    className="flex cursor-pointer items-center justify-between px-[2.4rem] py-[1.2rem] text-[1.6rem] text-[#647196] transition-all duration-300 hover:text-[#ad1fea]"
+                    onClick={() => handleStatusChange("Live")}
+                  >
+                    <span>Live</span>
+                    {category === "Live" && (
+                      <FaCheck color="#ad1fea" size={"1.5rem"} />
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
           <div>
             <label className="flex flex-col pb-[1.6rem]" htmlFor="detail">
               <span className="text-[1.4rem] font-bold tracking-[-0.0194rem] text-[#3a4374]">
@@ -203,27 +284,34 @@ function CreateFeedback() {
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-8 pt-[3.2rem]">
+        <div className="flex items-center justify-between pt-[3.2rem]">
           <button
             type="button"
-            className="rounded-[1rem] bg-[#3a4374] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe] transition-all duration-300 hover:bg-[#656ea3]"
-            onClick={() => reset()}
+            className="rounded-[1rem] bg-[#d73737] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe] transition-all duration-300 hover:bg-[#e98888]"
           >
-            Cancel
+            Delete
           </button>
 
-          <button
-            type="submit"
-            className="rounded-[1rem] bg-[#ad1fea] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe] transition-all duration-300 hover:bg-[#c75af6]"
-          >
-            Add Feedback
-          </button>
+          <div className="flex items-center gap-8">
+            <button
+              type="button"
+              className="rounded-[1rem] bg-[#3a4374] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe] transition-all duration-300 hover:bg-[#656ea3]"
+              onClick={() => reset()}
+            >
+              Cancel
+            </button>
+
+            <button
+              type="submit"
+              className="rounded-[1rem] bg-[#ad1fea] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe] transition-all duration-300 hover:bg-[#c75af6]"
+            >
+              Add Feedback
+            </button>
+          </div>
         </div>
       </form>
-
-      {isCreatingFeedback && <TransparentLoader />}
     </section>
   );
 }
 
-export default CreateFeedback;
+export default EditFeedback;
