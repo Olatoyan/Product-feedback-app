@@ -6,12 +6,16 @@ import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { TiPlus } from "react-icons/ti";
 import { useCreateFeedback } from "./useCreateFeedback";
 
+import { useNavigate } from "react-router-dom";
+import TransparentLoader from "../../ui/TransparentLoader";
+
 type feedbackState = {
   title: string;
   detail: string;
 };
 
 function CreateFeedback() {
+  const navigate = useNavigate();
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [category, setCategory] = useState("Feature");
 
@@ -26,13 +30,11 @@ function CreateFeedback() {
     setIsCategoryOpen(false);
   }
 
-  const { register, handleSubmit, formState } = useForm<feedbackState>();
+  const { register, handleSubmit, formState, reset } = useForm<feedbackState>();
 
   const { errors } = formState;
-  console.log(errors);
-  function onSubmit(data: feedbackState) {
-    console.log(category);
 
+  function onSubmit(data: feedbackState) {
     createFeedback({
       title: data.title,
       category,
@@ -40,13 +42,12 @@ function CreateFeedback() {
     });
   }
 
-  if (isCreatingFeedback) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <section className="mx-auto w-full max-w-[58rem]">
-      <div className="flex items-center gap-2 pb-28 text-[1.4rem] font-bold text-[#647196]">
+    <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[58rem] flex-col justify-center">
+      <div
+        className="flex cursor-pointer items-center gap-2 pb-28 text-[1.4rem] font-bold text-[#647196]"
+        onClick={() => navigate(-1)}
+      >
         <MdOutlineKeyboardArrowLeft size={"2rem"} />
         <span>Go Back</span>
       </div>
@@ -103,7 +104,13 @@ function CreateFeedback() {
               onClick={handleToggleCategory}
             >
               <span>{category}</span>
-              <img src="./shared/icon-arrow-down.svg" alt="arrow down" />
+              <motion.img
+                initial={{ rotate: 0 }}
+                animate={{ rotate: isCategoryOpen ? 180 : 0 }}
+                transition={{ type: "spring" }}
+                src="./shared/icon-arrow-down.svg"
+                alt="arrow down"
+              />
             </button>
 
             <AnimatePresence>
@@ -202,19 +209,22 @@ function CreateFeedback() {
         <div className="flex items-center justify-end gap-8 pt-[3.2rem]">
           <button
             type="button"
-            className="rounded-[1rem] bg-[#3a4374] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe]"
+            className="rounded-[1rem] bg-[#3a4374] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe] transition-all duration-300 hover:bg-[#656ea3]"
+            onClick={() => reset()}
           >
             Cancel
           </button>
 
           <button
             type="submit"
-            className="rounded-[1rem] bg-[#ad1fea] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe]"
+            className="rounded-[1rem] bg-[#ad1fea] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe] transition-all duration-300 hover:bg-[#c75af6]"
           >
             Add Feedback
           </button>
         </div>
       </form>
+
+      {isCreatingFeedback && <TransparentLoader />}
     </section>
   );
 }

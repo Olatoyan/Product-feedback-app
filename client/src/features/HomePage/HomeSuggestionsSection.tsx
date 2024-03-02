@@ -132,10 +132,13 @@ function HomeSuggestionsSection({
           </AnimatePresence>
         </div>
 
-        <button className="ml-auto flex items-center gap-1 rounded-[1rem] bg-[#ad1fea] px-[2.4rem] py-5 text-[#f2f4fe] transition-all duration-300 hover:bg-[#c75af6]">
+        <Link
+          to="/create-feedback"
+          className="ml-auto flex items-center gap-1 rounded-[1rem] bg-[#ad1fea] px-[2.4rem] py-5 text-[#f2f4fe] transition-all duration-300 hover:bg-[#c75af6]"
+        >
           <HiPlusSmall size={"2rem"} />
           <span className="text-[1.4rem] font-bold">Add Feedback</span>
-        </button>
+        </Link>
       </header>
 
       {getSuggestedFeedbacks.length > 0 ? (

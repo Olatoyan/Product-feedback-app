@@ -53,7 +53,7 @@ export async function createFeedBackApi({
 }) {
   console.log(title, category, detail);
   try {
-    const response = await fetch(`${BASE_URL}?createProduct`, {
+    const response = await fetch(`${BASE_URL}/createProduct`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -61,7 +61,9 @@ export async function createFeedBackApi({
       body: JSON.stringify({ title, category, detail }),
     });
 
+    console.log(response);
     const data = await response.json();
+    console.log(data);
     return data;
   } catch (error) {
     console.error(error);

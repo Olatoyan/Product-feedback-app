@@ -4,6 +4,7 @@ import Sidebar from "./Sidebar";
 import { useGetSuggestedFeedbacks } from "./useGetSuggestedFeedbacks";
 import { useEffect } from "react";
 import { useGetAllFeedbacks } from "./useGetAllFeedbacks";
+import Loader from "../../ui/Loader";
 
 function HomePage() {
   const { getSuggestedFeedbacks, isPendingGetFeedbacks } =
@@ -20,8 +21,7 @@ function HomePage() {
       setSearchParams({ category: "all", sortBy: "most-upvotes" });
   }, [setSearchParams, searchParams]);
 
-  if (isPendingGetFeedbacks || isAllFeedbackPending)
-    return <p>Loading...............................</p>;
+  if (isPendingGetFeedbacks || isAllFeedbackPending) return <Loader />;
 
   return (
     <div className="grid grid-cols-[auto_1fr] gap-12 p-16">
