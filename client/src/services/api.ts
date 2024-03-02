@@ -41,3 +41,30 @@ export async function getAllSuggestedFeedbackApi(
     throw error;
   }
 }
+
+export async function createFeedBackApi({
+  title,
+  category,
+  detail,
+}: {
+  title: string;
+  category: string;
+  detail: string;
+}) {
+  console.log(title, category, detail);
+  try {
+    const response = await fetch(`${BASE_URL}?createProduct`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title, category, detail }),
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
