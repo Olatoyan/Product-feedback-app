@@ -70,3 +70,29 @@ export async function createFeedBackApi({
     throw error;
   }
 }
+
+export async function postReplyApi({
+  id,
+  comment,
+  username,
+}: {
+  id: string;
+  comment: string;
+  username: string;
+}) {
+  try {
+    const response = await fetch(`${BASE_URL}/replyComment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ comment, id, username }),
+    });
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

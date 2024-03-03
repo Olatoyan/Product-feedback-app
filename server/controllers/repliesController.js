@@ -19,7 +19,7 @@ exports.getReplyingTo = catchAsync(async (req, res, next) => {
 });
 
 exports.replyComment = catchAsync(async (req, res, next) => {
-  const { comment, id } = req.body;
+  const { comment, id,username } = req.body;
 
   const user = await User.findById("65de70aa6b8ac8431c102bc7");
 
@@ -27,7 +27,7 @@ exports.replyComment = catchAsync(async (req, res, next) => {
 
   const reply = await Reply.create({
     content: comment,
-    replyingTo: req.username,
+    replyingTo: username,
     user: user._id,
   });
 

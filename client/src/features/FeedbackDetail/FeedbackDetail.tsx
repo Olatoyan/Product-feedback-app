@@ -4,11 +4,15 @@ import { FaComment } from "react-icons/fa6";
 import { IoIosArrowUp } from "react-icons/io";
 import { useGetAllFeedbacks } from "../HomePage/useGetAllFeedbacks";
 import { commentType, productType } from "../../types/types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import FeedbackComments from "./FeedbackComments";
+import { usePostReply } from "./usePostReply";
+import TransparentLoader from "../../ui/TransparentLoader";
 
 function FeedbackDetail() {
   const { allFeedbacks } = useGetAllFeedbacks();
+  const { postReply, isReplying } = usePostReply();
+
   const navigate = useNavigate();
 
   const { feedbackId } = useParams();
@@ -17,6 +21,12 @@ function FeedbackDetail() {
     (data: productType) => data._id === feedbackId,
   );
 
+  const [openReplyId, setOpenReplyId] = useState("");
+
+  function handleOpenReply(commentId: string) {
+    setOpenReplyId(commentId);
+  }
+
   useEffect(() => {
     if (!findFeedback) {
       navigate("/");
@@ -24,12 +34,13 @@ function FeedbackDetail() {
   }, [findFeedback, navigate]);
 
   return (
-    <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[78rem] flex-col justify-center gap-[2.4rem] py-8">
+    <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[82rem] flex-col justify-center gap-[2.4rem] py-8">
+      {isReplying && <TransparentLoader />}
       <div className="flex items-center justify-between">
         <NavigateBack />
 
         <Link
-          to="/edit-feedback"
+          to={`/edit-feedback/${feedbackId}`}
           className="rounded-[1rem] bg-[#4661e6] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe]"
         >
           Edit Feedback
@@ -66,7 +77,14 @@ function FeedbackDetail() {
 
       <div className="space-y-[3.2rem] divide-y divide-[#8c92b3] divide-opacity-25 bg-white px-[3.2rem] pb-[4.8rem] pt-[2.4rem]">
         {findFeedback?.comments.map((comment: commentType) => (
-          <FeedbackComments key={comment._id} comment={comment} />
+          <FeedbackComments
+            key={comment._id}
+            comment={comment}
+            openReplyId={openReplyId}
+            isOpen={openReplyId === comment._id}
+            onOpenReply={handleOpenReply}
+            postReply={postReply}
+          />
         ))}
       </div>
 

@@ -1,10 +1,42 @@
+import { useState } from "react";
 import { commentType, replyType } from "../../types/types";
 import FeedbackReplies from "./FeedbackReplies";
+import PostReply from "./PostReply";
+import { UseMutateFunction } from "@tanstack/react-query";
+// import { usePostComment } from "./usePostComment";
+// import TransparentLoader from "../../ui/TransparentLoader";
 
-function FeedbackComments({ comment }: { comment: commentType }) {
-  console.log(comment);
+function FeedbackComments({
+  comment,
+  isOpen,
+  onOpenReply,
+  openReplyId,
+  postReply,
+}: {
+  comment: commentType;
+  isOpen: boolean;
+  onOpenReply: (comment: string) => void;
+  openReplyId: string;
+  postReply: UseMutateFunction<
+    unknown,
+    Error,
+    { comment: string; id: string; username: string },
+    unknown
+  >;
+}) {
+  // const { postComment, isCommenting } = usePostComment();
+
+  const [commentText, setCommentText] = useState("");
+  function handleCommentReply() {
+    console.log(comment);
+    onOpenReply(comment._id);
+
+    // postComment(commentText);
+  }
+
   return (
-    <div>
+    <div className="relative">
+      {/* {true && <TransparentLoader />} */}
       <div className="grid grid-cols-[auto_1fr_auto] gap-x-[3.2rem] gap-y-[1.7rem] pt-[3.2rem]">
         <img
           src={comment.user.image}
@@ -21,7 +53,10 @@ function FeedbackComments({ comment }: { comment: commentType }) {
           </p>
         </div>
 
-        <button className="text-[1.3rem] font-semibold text-[#4661e6]">
+        <button
+          className="text-[1.3rem] font-semibold text-[#4661e6]"
+          onClick={handleCommentReply}
+        >
           Reply
         </button>
 
@@ -29,10 +64,27 @@ function FeedbackComments({ comment }: { comment: commentType }) {
           {comment.content}
         </p>
       </div>
+      {isOpen && (
+        <div className="flex justify-end">
+          <PostReply
+            valueText={commentText}
+            setValueText={setCommentText}
+            postReply={postReply}
+            onOpenReply={onOpenReply}
+            id={comment._id}
+            username={comment.user.username}
+          />
+        </div>
+      )}
 
       <div className="flex flex-col items-end gap-[3.2rem] pt-[3.2rem]">
         {comment.replies.map((reply: replyType) => (
-          <FeedbackReplies key={reply._id} reply={reply} />
+          <FeedbackReplies
+            key={reply._id}
+            reply={reply}
+            isOpen={openReplyId === reply._id}
+            onOpenReply={onOpenReply}
+          />
         ))}
       </div>
     </div>
