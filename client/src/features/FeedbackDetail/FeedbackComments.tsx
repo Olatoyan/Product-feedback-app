@@ -84,6 +84,8 @@ function FeedbackComments({
             reply={reply}
             isOpen={openReplyId === reply._id}
             onOpenReply={onOpenReply}
+            postReply={postReply}
+            commentId={comment._id}
           />
         ))}
       </div>

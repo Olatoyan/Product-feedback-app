@@ -1,17 +1,30 @@
+import { UseMutateFunction } from "@tanstack/react-query";
 import { replyType } from "../../types/types";
 import PostReply from "./PostReply";
+import { useState } from "react";
 
 function FeedbackReplies({
   reply,
   isOpen,
   onOpenReply,
+  postReply,
+  commentId,
 }: {
   reply: replyType;
   isOpen: boolean;
+  commentId: string;
   onOpenReply: (replyId: string) => void;
+  postReply: UseMutateFunction<
+    unknown,
+    Error,
+    { comment: string; id: string; username: string },
+    unknown
+  >;
 }) {
+  const [commentText, setCommentText] = useState("");
+
+  console.log(reply);
   function handleReply() {
-    console.log(reply);
     onOpenReply(reply._id);
   }
   return (
@@ -45,7 +58,14 @@ function FeedbackReplies({
 
       {isOpen && (
         <div className="flex justify-end">
-          <PostReply />
+          <PostReply
+            valueText={commentText}
+            setValueText={setCommentText}
+            postReply={postReply}
+            onOpenReply={onOpenReply}
+            id={commentId}
+            username={reply.user.username}
+          />
         </div>
       )}
     </div>
