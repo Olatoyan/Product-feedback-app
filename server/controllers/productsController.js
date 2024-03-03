@@ -1,6 +1,8 @@
 const Product = require("../models/productModel");
 const catchAsync = require("./../utils/catchAsync");
 const AppError = require("./../utils/appError");
+const Reply = require("../models/repliesModel");
+const Comment = require("../models/commentModel");
 
 exports.getAllProducts = catchAsync(async (req, res, next) => {
   const products = await Product.find()
@@ -159,3 +161,55 @@ exports.findProduct = catchAsync(async (req, res, next) => {
     },
   });
 });
+exports.deleteProduct = catchAsync(async (req, res, next) => {
+  // Find the product and populate its comments with user and replies
+  const product = await Product.findById(req.query.id)
+    .populate({
+      path: "comments",
+      select: "-__v",
+      populate: [
+        { path: "user", select: "-__v" },
+        {
+          path: "replies",
+          select: "-__v",
+          populate: { path: "user", select: "-__v" },
+        },
+      ],
+    })
+    .select("-__v");
+
+  if (!product) {
+    return next(new AppError("A product with that ID was not found", 404));
+  }
+
+  // Iterate through the comments and delete their associated replies
+  for (const comment of product.comments) {
+    await Reply.deleteMany({ _id: { $in: comment.replies } });
+  }
+
+  // Delete the comments
+  await Comment.deleteMany({ _id: { $in: product.comments } });
+
+  // Finally, delete the product
+  await Product.deleteOne({ _id: product._id });
+
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
+});
+
+// exports.deleteProduct = catchAsync(async (req, res, next) => {
+//   const product = await Product.findByIdAndDelete(req.query.id);
+//   if (!product) {
+//     return next(new AppError("A product with that ID was not found", 404));
+//   }
+//   // const comments = await Comment.d
+
+//   res.status(204).json({
+//     status: "success",
+//     data: {
+//       product,
+//     },
+//   });
+// });

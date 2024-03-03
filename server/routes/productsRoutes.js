@@ -10,6 +10,7 @@ const {
   createProduct,
   editProduct,
   findProduct,
+  deleteProduct,
 } = productsController;
 
 router.route("/getAllProducts").get(getAllProducts);
@@ -17,5 +18,6 @@ router.route("/getProduct").get(findProduct);
 router.route("/getAllSuggestedProducts").get(getAllSuggestedProducts);
 router.route("/createProduct").post(createProduct);
 router.route("/editProduct").post(editProduct);
+router.route("/deleteProduct").delete(deleteProduct);
 
 module.exports = router;

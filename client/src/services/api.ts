@@ -54,6 +54,20 @@ export async function getProductApi(id: string) {
   }
 }
 
+export async function deleteFeedbackApi(id: string) {
+  try {
+    await fetch(`${BASE_URL}/deleteProduct?id=${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export async function createFeedBackApi({
   title,
   category,

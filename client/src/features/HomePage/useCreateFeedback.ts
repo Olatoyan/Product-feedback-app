@@ -1,16 +1,18 @@
 import { useMutation } from "@tanstack/react-query";
 import { createFeedBackApi } from "../../services/api";
 import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 export function useCreateFeedback() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { mutate: createFeedback, isPending: isCreatingFeedback } = useMutation(
     {
       mutationFn: (data: { title: string; category: string; detail: string }) =>
         createFeedBackApi(data),
       onSuccess: () => {
-        console.log("Success");
         queryClient.invalidateQueries({ queryKey: ["getSuggestedFeedbacks"] });
+        navigate("/");
       },
     },
   );

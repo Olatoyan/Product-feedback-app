@@ -3,7 +3,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Route, Routes } from "react-router-dom";
 import HomePage from "./features/HomePage/HomePage";
 import CreateFeedback from "./features/HomePage/CreateFeedback";
-import EditFeedback from "./features/HomePage/EditFeedback";
+import EditFeedback from "./features/FeedbackDetail/EditFeedback";
 import FeedbackDetail from "./features/FeedbackDetail/FeedbackDetail";
 
 const queryClient = new QueryClient({

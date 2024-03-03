@@ -48,6 +48,8 @@ function FeedbackDetail() {
   }, [getFeedback, navigate, isGettingFeedback]);
 
   if (isGettingFeedback) return <Loader />;
+
+  
   return (
     <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[82rem] flex-col justify-center gap-[2.4rem] py-8">
       {(isReplying || isCommenting || isGettingFeedback) && (

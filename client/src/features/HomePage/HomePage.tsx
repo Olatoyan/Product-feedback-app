@@ -5,11 +5,13 @@ import { useGetSuggestedFeedbacks } from "./useGetSuggestedFeedbacks";
 import { useEffect } from "react";
 import { useGetAllFeedbacks } from "./useGetAllFeedbacks";
 import Loader from "../../ui/Loader";
+import { useDeleteFeedback } from "../FeedbackDetail/useDeleteFeedback";
 
 function HomePage() {
   const { getSuggestedFeedbacks, isPendingGetFeedbacks } =
     useGetSuggestedFeedbacks();
   const { allFeedbacks, isAllFeedbackPending } = useGetAllFeedbacks();
+  const { isDeletingFeedback } = useDeleteFeedback();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -21,7 +23,8 @@ function HomePage() {
       setSearchParams({ category: "all", sortBy: "most-upvotes" });
   }, [setSearchParams, searchParams]);
 
-  if (isPendingGetFeedbacks || isAllFeedbackPending) return <Loader />;
+  if (isPendingGetFeedbacks || isAllFeedbackPending || isDeletingFeedback)
+    return <Loader />;
 
   return (
     <div className="grid grid-cols-[auto_1fr] gap-12 p-16">
