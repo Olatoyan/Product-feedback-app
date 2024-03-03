@@ -131,3 +131,31 @@ exports.editProduct = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+exports.findProduct = catchAsync(async (req, res, next) => {
+  const product = await Product.findById(req.query.id)
+    .populate({
+      path: "comments",
+      select: "-__v",
+      populate: [
+        { path: "user", select: "-__v" },
+        {
+          path: "replies",
+          select: "-__v",
+          populate: { path: "user", select: "-__v" },
+        },
+      ],
+    })
+    .select("-__v");
+
+  if (!product) {
+    return next(new AppError("A product with that ID was not found", 404));
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      product,
+    },
+  });
+});

@@ -9,7 +9,7 @@ export function usePostReply() {
       postReplyApi(data),
     onSuccess: () => {
       console.log("success");
-      queryClient.invalidateQueries({ queryKey: ["all-feedbacks"] });
+      queryClient.invalidateQueries({ queryKey: ["feedback"] });
     },
   });
 

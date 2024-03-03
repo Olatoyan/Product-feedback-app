@@ -42,6 +42,18 @@ export async function getAllSuggestedFeedbackApi(
   }
 }
 
+export async function getProductApi(id: string) {
+  try {
+    const response = await fetch(`${BASE_URL}/getProduct?id=${id}`);
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export async function createFeedBackApi({
   title,
   category,
