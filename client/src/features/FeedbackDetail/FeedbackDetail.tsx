@@ -11,11 +11,13 @@ import TransparentLoader from "../../ui/TransparentLoader";
 import { usePostComment } from "./usePostComment";
 import { useGetFeedback } from "./useGetFeedback";
 import Loader from "../../ui/Loader";
+import { useIncreaseUpvotes } from "../HomePage/useIncreaseUpvotes";
 
 function FeedbackDetail() {
   const { postReply, isReplying } = usePostReply();
   const { postComment, isCommenting } = usePostComment();
   const { getFeedback, isGettingFeedback } = useGetFeedback();
+  const { increaseUpvotes, isIncreasing } = useIncreaseUpvotes();
 
   const navigate = useNavigate();
 
@@ -49,10 +51,9 @@ function FeedbackDetail() {
 
   if (isGettingFeedback) return <Loader />;
 
-  
   return (
     <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[82rem] flex-col justify-center gap-[2.4rem] py-8">
-      {(isReplying || isCommenting || isGettingFeedback) && (
+      {(isReplying || isCommenting || isGettingFeedback || isIncreasing) && (
         <TransparentLoader />
       )}
       <div className="flex items-center justify-between">
@@ -67,7 +68,14 @@ function FeedbackDetail() {
       </div>
 
       <div className="group grid cursor-pointer grid-cols-[auto_1fr_auto] gap-16 rounded-[1rem] bg-white px-[3.2rem] py-[2.8rem]">
-        <button className="flex flex-col items-center self-start rounded-[1rem] bg-[#f2f4fe] p-4 text-[#4661e6] transition-all duration-300 hover:bg-[#cfd7ff]">
+        <button
+          className="flex flex-col items-center self-start rounded-[1rem] bg-[#f2f4fe] p-4 text-[#4661e6] transition-all duration-300 hover:bg-[#cfd7ff]"
+          onClick={() => {
+            // e.preventDefault()
+            // e.stopPropagation()
+            increaseUpvotes(feedbackId!);
+          }}
+        >
           <IoIosArrowUp size={"2rem"} />
           <p className="text-[1.3rem] font-bold tracking-[-0.0181rem] text-[#3a4374]">
             {getFeedback?.upvotes}

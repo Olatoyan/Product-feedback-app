@@ -5,9 +5,16 @@ const catchAsync = require("../utils/catchAsync");
 const Comment = require("./../models/commentModel");
 
 exports.createComment = catchAsync(async (req, res, next) => {
-  // const { id } = req.query;
+  // Fetch all users from the database
+  const users = await User.find();
 
-  const user = await User.findById("65de70aa6b8ac8431c102bc7");
+  // Check if there are users in the database
+  if (!users.length) {
+    return next(new AppError("No users found in the database", 404));
+  }
+
+  // Randomly select a user from the list
+  const randomUser = users[Math.floor(Math.random() * users.length)];
 
   const { comment, id } = req.body;
 
@@ -23,7 +30,7 @@ exports.createComment = catchAsync(async (req, res, next) => {
 
   const newComment = await Comment.create({
     content: comment,
-    user: user._id,
+    user: randomUser._id,
   });
 
   product.comments.push(newComment._id);

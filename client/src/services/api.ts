@@ -175,3 +175,21 @@ export async function postCommentApi({
     throw error;
   }
 }
+
+export async function increaseUpvotesApi(id: string) {
+  try {
+    const response = await fetch(`${BASE_URL}/increaseUpvotes?id=${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(response);
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

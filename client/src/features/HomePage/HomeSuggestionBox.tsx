@@ -2,15 +2,25 @@ import { IoIosArrowUp } from "react-icons/io";
 import { FaComment } from "react-icons/fa6";
 import { productType } from "../../types/types";
 import { Link } from "react-router-dom";
+import { useIncreaseUpvotes } from "./useIncreaseUpvotes";
 
 function HomeSuggestionBox({ feedback }: { feedback: productType }) {
   console.log(feedback.comments.length);
+  const { increaseUpvotes, isIncreasing } = useIncreaseUpvotes();
   return (
     <Link
       to={`/feedback-detail/${feedback._id}`}
       className="group grid cursor-pointer grid-cols-[auto_1fr_auto] gap-16 rounded-[1rem] bg-white px-[3.2rem] py-[2.8rem]"
     >
-      <button className="flex flex-col items-center self-start rounded-[1rem] bg-[#f2f4fe] p-4 text-[#4661e6] transition-all duration-300 hover:bg-[#cfd7ff]">
+      <button
+        className="flex flex-col items-center self-start rounded-[1rem] bg-[#f2f4fe] p-4 text-[#4661e6] transition-all duration-300 hover:bg-[#cfd7ff] disabled:bg-[#ccc]"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          increaseUpvotes(feedback._id);
+        }}
+        disabled={isIncreasing}
+      >
         <IoIosArrowUp size={"2rem"} />
         <p className="text-[1.3rem] font-bold tracking-[-0.0181rem] text-[#3a4374]">
           {feedback.upvotes}

@@ -21,7 +21,16 @@ exports.getReplyingTo = catchAsync(async (req, res, next) => {
 exports.replyComment = catchAsync(async (req, res, next) => {
   const { comment, id, username } = req.body;
 
-  const user = await User.findById("65de70aa6b8ac8431c102bc7");
+  // Fetch all users from the database
+  const users = await User.find();
+
+  // Check if there are users in the database
+  if (!users.length) {
+    return next(new AppError("No users found in the database", 404));
+  }
+
+  // Randomly select a user from the list
+  const randomUser = users[Math.floor(Math.random() * users.length)];
 
   const findComment = await Comment.findById(id);
 
@@ -29,7 +38,7 @@ exports.replyComment = catchAsync(async (req, res, next) => {
   const reply = await Reply.create({
     content: comment,
     replyingTo: username,
-    user: user._id,
+    user: randomUser._id,
   });
 
   findComment.replies.push(reply._id);

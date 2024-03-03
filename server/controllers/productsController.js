@@ -199,17 +199,17 @@ exports.deleteProduct = catchAsync(async (req, res, next) => {
   });
 });
 
-// exports.deleteProduct = catchAsync(async (req, res, next) => {
-//   const product = await Product.findByIdAndDelete(req.query.id);
-//   if (!product) {
-//     return next(new AppError("A product with that ID was not found", 404));
-//   }
-//   // const comments = await Comment.d
-
-//   res.status(204).json({
-//     status: "success",
-//     data: {
-//       product,
-//     },
-//   });
-// });
+exports.increaseUpvotes = catchAsync(async (req, res, next) => {
+  const product = await Product.findById(req.query.id);
+  if (!product) {
+    return next(new AppError("A product with that ID was not found", 404));
+  }
+  product.upvotes += 1;
+  await product.save(); // Save the updated product after incrementing upvotes
+  res.status(200).json({
+    status: "success",
+    data: {
+      product,
+    },
+  });
+});
