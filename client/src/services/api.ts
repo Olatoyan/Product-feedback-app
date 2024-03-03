@@ -96,3 +96,26 @@ export async function postReplyApi({
     throw error;
   }
 }
+export async function postCommentApi({
+  id,
+  comment,
+}: {
+  id: string;
+  comment: string;
+}) {
+  try {
+    const response = await fetch(`${BASE_URL}/createComment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ comment, id }),
+    });
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

@@ -4,14 +4,16 @@ import { FaComment } from "react-icons/fa6";
 import { IoIosArrowUp } from "react-icons/io";
 import { useGetAllFeedbacks } from "../HomePage/useGetAllFeedbacks";
 import { commentType, productType } from "../../types/types";
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import FeedbackComments from "./FeedbackComments";
 import { usePostReply } from "./usePostReply";
 import TransparentLoader from "../../ui/TransparentLoader";
+import { usePostComment } from "./usePostComment";
 
 function FeedbackDetail() {
   const { allFeedbacks } = useGetAllFeedbacks();
   const { postReply, isReplying } = usePostReply();
+  const { postComment, isCommenting } = usePostComment();
 
   const navigate = useNavigate();
 
@@ -22,9 +24,23 @@ function FeedbackDetail() {
   );
 
   const [openReplyId, setOpenReplyId] = useState("");
+  const [commentText, setCommentText] = useState("");
 
   function handleOpenReply(commentId: string) {
     setOpenReplyId(commentId);
+  }
+
+  function handlePostComment(e: SyntheticEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (commentText.length < 3) return;
+    postComment(
+      { id: feedbackId!, comment: commentText },
+      {
+        onSuccess: () => {
+          setCommentText("");
+        },
+      },
+    );
   }
 
   useEffect(() => {
@@ -35,7 +51,7 @@ function FeedbackDetail() {
 
   return (
     <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[82rem] flex-col justify-center gap-[2.4rem] py-8">
-      {isReplying && <TransparentLoader />}
+      {(isReplying || isCommenting) && <TransparentLoader />}
       <div className="flex items-center justify-between">
         <NavigateBack />
 
@@ -88,18 +104,35 @@ function FeedbackDetail() {
         ))}
       </div>
 
-      <form className="bg-white px-[3.4rem] py-[2.4rem]">
+      <form
+        className="bg-white px-[3.4rem] py-[2.4rem]"
+        onSubmit={handlePostComment}
+      >
         <h3 className="pb-[2.4rem] text-[1.8rem] font-bold tracking-[-0.025rem] text-[#3a4374]">
           Add Comment
         </h3>
         <textarea
           placeholder="Type your comment here"
-          className={`w-full resize-none rounded-[0.5rem] border border-solid border-transparent bg-[#f7f8fd] px-[2.4rem] py-[1.2rem] text-[1.5rem]  text-[#3a4374] focus:border-[#4661e6] focus:outline-[#4661e6]`}
+          value={commentText}
+          onChange={(e) => {
+            if (
+              commentText.length < 250 ||
+              e.target.value.length < commentText.length
+            ) {
+              setCommentText(e.target.value);
+            }
+          }}
+          className={`w-full resize-none rounded-[0.5rem] border border-solid border-transparent bg-[#f7f8fd] px-[2.4rem] py-[1.2rem] text-[1.5rem]  text-[#3a4374] ${commentText.length < 3 ? "border-[#d73737] focus:border-[#d73737] focus:outline-[#d73737]" : "focus:border-[#4661e6] focus:outline-[#4661e6]"}`}
         />
 
         <div className="flex items-center justify-between pt-[1.6rem]">
-          <p className="text-[1.5rem] text-[#647196]">250 Characters left</p>
-          <button className="rounded-[1rem] bg-[#ad1fea] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe]">
+          <p className="text-[1.5rem] text-[#647196]">
+            {250 - commentText.length} Characters left
+          </p>
+          <button
+            className="rounded-[1rem] bg-[#ad1fea] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe] disabled:cursor-not-allowed disabled:bg-[#999]"
+            disabled={commentText.length < 3}
+          >
             Post Comment
           </button>
         </div>

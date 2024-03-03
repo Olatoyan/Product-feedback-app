@@ -42,7 +42,14 @@ function PostReply({
       <textarea
         placeholder="Type your comment here"
         value={valueText}
-        onChange={(e) => setValueText(e.target.value)}
+        onChange={(e) => {
+          if (
+            valueText.length < 250 ||
+            e.target.value.length < valueText.length
+          ) {
+            setValueText(e.target.value);
+          }
+        }}
         className={`w-[75%] resize-none rounded-[0.5rem] border border-solid border-transparent bg-[#f7f8fd] px-[2.4rem] py-[1.2rem] text-[1.5rem]  text-[#3a4374] focus:border-[#4661e6] focus:outline-[#4661e6]`}
       />
 
@@ -50,7 +57,9 @@ function PostReply({
         <button className="rounded-[1rem] bg-[#ad1fea] p-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe]">
           Post Reply
         </button>
-        <p className="text-[1.3rem] text-[#647196]">250 Chars left</p>
+        <p className="text-[1.3rem] text-[#647196]">
+          {250 - valueText.length} Chars left
+        </p>
       </div>
     </form>
   );

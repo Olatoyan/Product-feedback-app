@@ -5,12 +5,13 @@ const catchAsync = require("../utils/catchAsync");
 const Comment = require("./../models/commentModel");
 
 exports.createComment = catchAsync(async (req, res, next) => {
-  const { id } = req.query;
+  // const { id } = req.query;
 
-  const product = await Product.findById(id);
   const user = await User.findById("65de70aa6b8ac8431c102bc7");
 
-  const { comment } = req.body;
+  const { comment, id } = req.body;
+
+  const product = await Product.findById(id);
 
   if (!product) {
     return next(new AppError("A product with that ID was not found", 404));
