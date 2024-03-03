@@ -54,20 +54,6 @@ export async function getProductApi(id: string) {
   }
 }
 
-export async function deleteFeedbackApi(id: string) {
-  try {
-    await fetch(`${BASE_URL}/deleteProduct?id=${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
 export async function createFeedBackApi({
   title,
   category,
@@ -90,6 +76,50 @@ export async function createFeedBackApi({
     console.log(response);
     const data = await response.json();
     console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function deleteFeedbackApi(id: string) {
+  try {
+    await fetch(`${BASE_URL}/deleteProduct?id=${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function editFeedbackApi({
+  title,
+  category,
+  detail,
+  status,
+  id,
+}: {
+  title: string;
+  category: string;
+  detail: string;
+  status: string;
+  id: string;
+}) {
+  try {
+    const response = await fetch(`${BASE_URL}/editProduct?id=${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title, category, detail, status }),
+    });
+
+    const data = await response.json();
     return data;
   } catch (error) {
     console.error(error);

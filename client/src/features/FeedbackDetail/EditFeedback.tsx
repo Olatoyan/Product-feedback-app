@@ -1,12 +1,13 @@
 import { useForm } from "react-hook-form";
 import NavigateBack from "../../ui/NavigateBack";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaCheck } from "react-icons/fa6";
 import { useGetFeedback } from "./useGetFeedback";
 import Loader from "../../ui/Loader";
 import { useDeleteFeedback } from "./useDeleteFeedback";
 import DeleteModal from "./DeleteModal";
+import { useEditFeedback } from "./useEditFeedback";
 
 type feedbackState = {
   title: string;
@@ -16,14 +17,20 @@ type feedbackState = {
 function EditFeedback() {
   const { getFeedback, isGettingFeedback } = useGetFeedback();
   const { deleteFeedback, isDeletingFeedback } = useDeleteFeedback();
-
-  console.log("edit", getFeedback);
+  const { editFeedback, isEditingFeedback } = useEditFeedback();
 
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isStatusOpen, setIsStatusOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [category, setCategory] = useState(getFeedback?.category);
   const [status, setStatus] = useState(getFeedback?.status);
+
+  useEffect(() => {
+    if (getFeedback) {
+      setCategory(getFeedback?.category);
+      setStatus(getFeedback?.status);
+    }
+  }, [getFeedback]);
 
   const { register, handleSubmit, formState, reset } = useForm<feedbackState>();
 
@@ -48,7 +55,13 @@ function EditFeedback() {
   }
 
   function onSubmit(data: feedbackState) {
-    console.log(data);
+    // console.log("submit", data);
+    editFeedback({
+      title: data.title,
+      detail: data.detail,
+      category,
+      status,
+    });
   }
 
   function handleOpenModal() {
@@ -59,7 +72,8 @@ function EditFeedback() {
     setOpenDeleteModal(false);
   }
 
-  if (isGettingFeedback || isDeletingFeedback) return <Loader />;
+  if (isGettingFeedback || isDeletingFeedback || isEditingFeedback)
+    return <Loader />;
 
   return (
     <>
@@ -95,7 +109,7 @@ function EditFeedback() {
               <input
                 type="text"
                 id="title"
-                defaultValue={getFeedback.description}
+                defaultValue={getFeedback.title}
                 className={`w-full rounded-[0.5rem] border border-solid bg-[#f7f8fd] px-[2.4rem] py-[1.2rem] text-[1.5rem] text-[#3a4374] ${errors?.title?.message ? "border-[#d73737] focus:border-[#d73737] focus:outline-[#d73737]" : "border-transparent focus:border-[#4661e6] focus:outline-[#4661e6]"}`}
                 {...register("title", {
                   required: "Can't be empty",
