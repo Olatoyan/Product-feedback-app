@@ -9,7 +9,7 @@ function RoadmapStatusBox({ data }: { data: productType }) {
   return (
     <Link
       to={`/feedback-detail/${data._id}`}
-      className={`flex min-h-[28rem] flex-col rounded-[0.5rem] border-t-[6px] border-solid bg-white p-[3.2rem] ${data.status === "planned" ? "border-[#f49f85]" : data.status === "in-progress" ? "border-[#ad1fea]" : "border-[#62bcfa]"}`}
+      className={`group flex min-h-[28rem] flex-col rounded-[0.5rem] border-t-[6px] border-solid bg-white p-[3.2rem] ${data.status === "planned" ? "border-[#f49f85]" : data.status === "in-progress" ? "border-[#ad1fea]" : "border-[#62bcfa]"}`}
     >
       <div className="flex items-center gap-8">
         <div
@@ -18,7 +18,7 @@ function RoadmapStatusBox({ data }: { data: productType }) {
         <p className="text-[1.6rem] capitalize text-[#647196]">{data.status}</p>
       </div>
 
-      <h3 className="pt-[0.8rem] text-[1.8rem] font-bold tracking-[-0.025rem] text-[#3a4374]">
+      <h3 className="pt-[0.8rem] text-[1.8rem] font-bold tracking-[-0.025rem] text-[#3a4374] group-hover:text-[#4661e6]">
         {data.title}
       </h3>
       <p className="pb-[1.6rem] text-[1.6rem] text-[#647196]">

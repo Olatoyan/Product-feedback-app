@@ -8,6 +8,7 @@ import Loader from "../../ui/Loader";
 import { useDeleteFeedback } from "./useDeleteFeedback";
 import DeleteModal from "./DeleteModal";
 import { useEditFeedback } from "./useEditFeedback";
+import { useNavigate } from "react-router-dom";
 
 type feedbackState = {
   title: string;
@@ -24,6 +25,8 @@ function EditFeedback() {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [category, setCategory] = useState(getFeedback?.category);
   const [status, setStatus] = useState(getFeedback?.status);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (getFeedback) {
@@ -334,7 +337,10 @@ function EditFeedback() {
               <button
                 type="button"
                 className="rounded-[1rem] bg-[#3a4374] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe] transition-all duration-300 hover:bg-[#656ea3]"
-                onClick={() => reset()}
+                onClick={() => {
+                  navigate(-1);
+                  reset();
+                }}
               >
                 Cancel
               </button>
