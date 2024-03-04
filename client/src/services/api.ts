@@ -193,3 +193,76 @@ export async function increaseUpvotesApi(id: string) {
     throw error;
   }
 }
+
+export async function deleteCommentApi(id: string) {
+  try {
+    await fetch(`${BASE_URL}/deleteComment?id=${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function deleteReplyApi(id: string) {
+  try {
+    await fetch(`${BASE_URL}/deleteReply?id=${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function editCommentApi({
+  id,
+  comment,
+}: {
+  id: string;
+  comment: string;
+}) {
+  try {
+    const response = await fetch(`${BASE_URL}/editComment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, comment }),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+export async function editReplyApi({
+  id,
+  comment,
+}: {
+  id: string;
+  comment: string;
+}) {
+  try {
+    const response = await fetch(`${BASE_URL}/editReply`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, comment }),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

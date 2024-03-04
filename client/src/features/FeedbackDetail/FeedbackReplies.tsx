@@ -2,6 +2,11 @@ import { UseMutateFunction } from "@tanstack/react-query";
 import { replyType } from "../../types/types";
 import PostReply from "./PostReply";
 import { useState } from "react";
+import { useDeleteReply } from "./useDeleteReply";
+import { useEditReply } from "./useEditReply";
+import TransparentLoader from "../../ui/TransparentLoader";
+import EditPost from "./EditPost";
+import DeleteModal from "./DeleteModal";
 
 function FeedbackReplies({
   reply,
@@ -21,14 +26,42 @@ function FeedbackReplies({
     unknown
   >;
 }) {
+  const { deleteReply, isDeletingReply } = useDeleteReply();
+  const { editReply, isEditingReply } = useEditReply();
+
   const [commentText, setCommentText] = useState("");
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openEditForm, setOpenEditForm] = useState(false);
+  const [editText, setEditText] = useState(reply?.content);
 
   console.log(reply);
   function handleReply() {
     onOpenReply(reply._id);
   }
+
+  function handleOpenModal() {
+    setOpenDeleteModal(true);
+  }
+
+  function handleCloseModal() {
+    setOpenDeleteModal(false);
+  }
+
+  function deleteReplyFn() {
+    deleteReply(reply._id);
+  }
+
+  function handleOpenEditForm() {
+    setOpenEditForm(true);
+  }
+
+  function handleCloseEditForm() {
+    setOpenEditForm(false);
+  }
+
   return (
-    <div className="flex w-[90%] flex-col">
+    <div className="relative flex w-[90%] flex-col">
+      {(isDeletingReply || isEditingReply) && <TransparentLoader />}
       <div className="grid grid-cols-[auto_1fr_auto] gap-x-[3.2rem] gap-y-[1.7rem]">
         <img
           src={reply.user.image}
@@ -43,17 +76,44 @@ function FeedbackReplies({
           <p className="text-[1.4rem] text-[#647196]">@{reply.user.username}</p>
         </div>
 
-        <button
-          className="text-[1.3rem] font-semibold text-[#4661e6]"
-          onClick={handleReply}
-        >
-          Reply
-        </button>
+        <div className="flex items-center gap-4">
+          <button
+            className="text-[1.3rem] font-semibold text-[#d73737] hover:underline"
+            onClick={handleOpenModal}
+          >
+            Delete
+          </button>
+          <button
+            className="text-[1.3rem] font-semibold text-[#647196] hover:underline"
+            onClick={handleOpenEditForm}
+          >
+            Edit
+          </button>
+          <button
+            className="text-[1.3rem] font-semibold text-[#4661e6]"
+            onClick={handleReply}
+          >
+            Reply
+          </button>
+        </div>
 
-        <p className="col-start-2 col-end-4 text-[1.5rem] text-[#647196]">
-          <span className="font-bold text-[#ad1fea]">@{reply.replyingTo}</span>{" "}
-          {reply.content}
-        </p>
+        {openEditForm ? (
+          <EditPost
+            text={editText}
+            setText={setEditText}
+            id={reply._id}
+            type="reply"
+            editFn={editReply}
+            handleCloseEditForm={handleCloseEditForm}
+          />
+        ) : (
+          <p className="col-start-2 col-end-4 text-[1.5rem] text-[#647196]">
+            <span className="font-bold text-[#ad1fea]">
+              @{reply.replyingTo}
+            </span>{" "}
+            {reply.content}
+          </p>
+        )}
       </div>
 
       {isOpen && (
@@ -67,6 +127,14 @@ function FeedbackReplies({
             username={reply.user.username}
           />
         </div>
+      )}
+
+      {openDeleteModal && (
+        <DeleteModal
+          onDelete={deleteReplyFn}
+          handleCloseModal={handleCloseModal}
+          type="reply"
+        />
       )}
     </div>
   );

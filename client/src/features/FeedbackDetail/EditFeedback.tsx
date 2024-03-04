@@ -351,8 +351,9 @@ function EditFeedback() {
       </section>
       {openDeleteModal && (
         <DeleteModal
-          deleteFeedback={deleteFeedback}
+          onDelete={deleteFeedback}
           handleCloseModal={handleCloseModal}
+          type="Feedback"
         />
       )}
     </>

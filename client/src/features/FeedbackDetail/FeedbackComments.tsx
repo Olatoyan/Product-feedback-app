@@ -3,8 +3,11 @@ import { commentType, replyType } from "../../types/types";
 import FeedbackReplies from "./FeedbackReplies";
 import PostReply from "./PostReply";
 import { UseMutateFunction } from "@tanstack/react-query";
-// import { usePostComment } from "./usePostComment";
-// import TransparentLoader from "../../ui/TransparentLoader";
+import DeleteModal from "./DeleteModal";
+import { useDeleteComment } from "./useDeleteComment";
+import TransparentLoader from "../../ui/TransparentLoader";
+import { useEditComment } from "./useEditComment";
+import EditPost from "./EditPost";
 
 function FeedbackComments({
   comment,
@@ -24,19 +27,41 @@ function FeedbackComments({
     unknown
   >;
 }) {
-  // const { postComment, isCommenting } = usePostComment();
+  const { deleteComment, isDeletingComment } = useDeleteComment();
+  const { editComment, isEditingComment } = useEditComment();
 
   const [commentText, setCommentText] = useState("");
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openEditForm, setOpenEditForm] = useState(false);
+  const [editText, setEditText] = useState(comment?.content);
   function handleCommentReply() {
     console.log(comment);
     onOpenReply(comment._id);
+  }
 
-    // postComment(commentText);
+  function handleOpenModal() {
+    setOpenDeleteModal(true);
+  }
+
+  function handleCloseModal() {
+    setOpenDeleteModal(false);
+  }
+
+  function deleteCommentFn() {
+    deleteComment(comment._id);
+  }
+
+  function handleOpenEditForm() {
+    setOpenEditForm(true);
+  }
+
+  function handleCloseEditForm() {
+    setOpenEditForm(false);
   }
 
   return (
     <div className="relative">
-      {/* {true && <TransparentLoader />} */}
+      {(isDeletingComment || isEditingComment) && <TransparentLoader />}
       <div className="grid grid-cols-[auto_1fr_auto] gap-x-[3.2rem] gap-y-[1.7rem] pt-[3.2rem]">
         <img
           src={comment.user.image}
@@ -53,16 +78,41 @@ function FeedbackComments({
           </p>
         </div>
 
-        <button
-          className="text-[1.3rem] font-semibold text-[#4661e6]"
-          onClick={handleCommentReply}
-        >
-          Reply
-        </button>
+        <div className="flex items-center gap-4">
+          <button
+            className="text-[1.3rem] font-semibold text-[#d73737] hover:underline"
+            onClick={handleOpenModal}
+          >
+            Delete
+          </button>
+          <button
+            className="text-[1.3rem] font-semibold text-[#647196] hover:underline"
+            onClick={handleOpenEditForm}
+          >
+            Edit
+          </button>
+          <button
+            className="text-[1.3rem] font-semibold text-[#4661e6] hover:underline"
+            onClick={handleCommentReply}
+          >
+            Reply
+          </button>
+        </div>
 
-        <p className="col-start-2 col-end-4 text-[1.5rem] text-[#647196]">
-          {comment.content}
-        </p>
+        {openEditForm ? (
+          <EditPost
+            text={editText}
+            setText={setEditText}
+            id={comment._id}
+            type="comment"
+            editFn={editComment}
+            handleCloseEditForm={handleCloseEditForm}
+          />
+        ) : (
+          <p className="col-start-2 col-end-4 text-[1.5rem] text-[#647196]">
+            {comment.content}
+          </p>
+        )}
       </div>
       {isOpen && (
         <div className="flex justify-end">
@@ -89,6 +139,14 @@ function FeedbackComments({
           />
         ))}
       </div>
+
+      {openDeleteModal && (
+        <DeleteModal
+          onDelete={deleteCommentFn}
+          handleCloseModal={handleCloseModal}
+          type="Comment"
+        />
+      )}
     </div>
   );
 }
