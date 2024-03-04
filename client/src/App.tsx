@@ -5,6 +5,7 @@ import HomePage from "./features/HomePage/HomePage";
 import CreateFeedback from "./features/HomePage/CreateFeedback";
 import EditFeedback from "./features/FeedbackDetail/EditFeedback";
 import FeedbackDetail from "./features/FeedbackDetail/FeedbackDetail";
+import RoadmapPage from "./features/Roadmap/RoadmapPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,6 +27,7 @@ function App() {
           path="feedback-detail/:feedbackId"
           element={<FeedbackDetail />}
         />
+        <Route path="roadmap" element={<RoadmapPage />} />
       </Routes>
     </QueryClientProvider>
   );

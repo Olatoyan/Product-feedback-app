@@ -1,4 +1,5 @@
 import { HiPlusSmall } from "react-icons/hi2";
+import { Link } from "react-router-dom";
 
 function EmptySuggestions() {
   return (
@@ -17,10 +18,13 @@ function EmptySuggestions() {
         about new ideas to improve our app.
       </p>
 
-      <button className="flex items-center gap-2 rounded-[1rem] bg-[#c75af6] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe]">
+      <Link
+        to="/create-feedback"
+        className="flex items-center gap-2 rounded-[1rem] bg-[#c75af6] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe]"
+      >
         <HiPlusSmall />
         <span>Add feedback</span>
-      </button>
+      </Link>
     </div>
   );
 }

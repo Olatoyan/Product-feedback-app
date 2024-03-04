@@ -1,0 +1,58 @@
+import { FaComment } from "react-icons/fa6";
+import { IoIosArrowUp } from "react-icons/io";
+import { productType } from "../../types/types";
+import { useIncreaseUpvotes } from "../HomePage/useIncreaseUpvotes";
+import { Link } from "react-router-dom";
+
+function RoadmapStatusBox({ data }: { data: productType }) {
+  const { increaseUpvotes, isIncreasing } = useIncreaseUpvotes();
+  return (
+    <Link
+      to={`/feedback-detail/${data._id}`}
+      className={`flex min-h-[28rem] flex-col rounded-[0.5rem] border-t-[6px] border-solid bg-white p-[3.2rem] ${data.status === "planned" ? "border-[#f49f85]" : data.status === "in-progress" ? "border-[#ad1fea]" : "border-[#62bcfa]"}`}
+    >
+      <div className="flex items-center gap-8">
+        <div
+          className={`h-[0.8rem] w-[0.8rem] rounded-full ${data.status === "planned" ? "bg-[#f49f85]" : data.status === "in-progress" ? "bg-[#ad1fea]" : "bg-[#62bcfa]"}`}
+        ></div>
+        <p className="text-[1.6rem] capitalize text-[#647196]">{data.status}</p>
+      </div>
+
+      <h3 className="pt-[0.8rem] text-[1.8rem] font-bold tracking-[-0.025rem] text-[#3a4374]">
+        {data.title}
+      </h3>
+      <p className="pb-[1.6rem] text-[1.6rem] text-[#647196]">
+        {data.description}
+      </p>
+      <p className="self-start rounded-[1rem] bg-[#f2f4ff] px-[1.6rem] py-2 text-[1.3rem] font-semibold capitalize text-[#4661e6]">
+        {data.category}
+      </p>
+
+      <div className="flex items-center justify-between pt-[1.6rem]">
+        <button
+          className="flex items-center gap-3 self-start rounded-[1rem] bg-[#f2f4fe] p-4 text-[#4661e6] transition-all duration-300 hover:bg-[#cfd7ff] disabled:bg-[#ccc]"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            increaseUpvotes(data._id);
+          }}
+          disabled={isIncreasing}
+        >
+          <IoIosArrowUp size={"2rem"} />
+          <p className="text-[1.3rem] font-bold tracking-[-0.0181rem] text-[#3a4374]">
+            {data.upvotes}
+          </p>
+        </button>
+
+        <div className="flex items-center">
+          <FaComment size={"2rem"} color="#cdd2ee" />
+          <p className="pl-4 text-[1.6rem] font-bold tracking-[-0.0222rem] text-[#3a4374]">
+            {data.comments.length}
+          </p>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+export default RoadmapStatusBox;
