@@ -52,7 +52,7 @@ function FeedbackDetail() {
   if (isGettingFeedback) return <Loader />;
 
   return (
-    <section className="tablet:px-8 tablet:grid-cols-[auto_1fr_auto] relative mx-auto flex min-h-[100dvh] w-full max-w-[82rem] flex-col justify-center gap-[2.4rem] py-8">
+    <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[82rem] flex-col justify-center gap-[2.4rem] py-8 tablet:grid-cols-[auto_1fr_auto] tablet:px-8">
       {(isReplying || isCommenting || isGettingFeedback || isIncreasing) && (
         <TransparentLoader />
       )}
@@ -61,15 +61,15 @@ function FeedbackDetail() {
 
         <Link
           to={`/edit-feedback/${feedbackId}`}
-          className="rounded-[1rem] bg-[#4661e6] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe]"
+          className="rounded-[1rem] bg-[#4661e6] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe] tablet:px-[1.6rem] tablet:text-[1.3rem]"
         >
           Edit Feedback
         </Link>
       </div>
 
-      <div className="group grid cursor-pointer grid-cols-[auto_1fr_auto] gap-16 rounded-[1rem] bg-white px-[3.2rem] py-[2.8rem]">
+      <div className="group grid cursor-pointer grid-cols-[auto_1fr_auto] gap-16 rounded-[1rem] bg-white px-[3.2rem] py-[2.8rem] tablet:px-[2.4rem]">
         <button
-          className="tablet:row-start-2 tablet:col-start-1 tablet:flex-row tablet:gap-3 flex flex-col items-center self-start rounded-[1rem] bg-[#f2f4fe] p-4 text-[#4661e6] transition-all duration-300 hover:bg-[#cfd7ff]"
+          className="flex flex-col items-center self-start rounded-[1rem] bg-[#f2f4fe] p-4 text-[#4661e6] transition-all duration-300 hover:bg-[#cfd7ff] tablet:col-start-1 tablet:row-start-2 tablet:flex-row tablet:gap-3"
           onClick={() => {
             // e.preventDefault()
             // e.stopPropagation()
@@ -82,11 +82,11 @@ function FeedbackDetail() {
           </p>
         </button>
 
-        <div className="tablet:col-span-full flex flex-col items-start">
-          <h1 className="pb-[0.4rem] text-[1.8rem] font-bold tracking-[-0.025rem] text-[#3a4374] transition-all duration-300 group-hover:text-[#4661e6]">
+        <div className="flex flex-col items-start tablet:col-span-full">
+          <h1 className="pb-[0.4rem] text-[1.8rem] font-bold tracking-[-0.025rem] text-[#3a4374] transition-all duration-300 group-hover:text-[#4661e6] tablet:text-[1.3rem] tablet:tracking-[-0.0181rem]">
             {getFeedback?.title}
           </h1>
-          <p className="pb-[1.2rem] text-[1.6rem] text-[#647196]">
+          <p className="pb-[1.2rem] text-[1.6rem] text-[#647196] tablet:text-[1.3rem]">
             {getFeedback?.description}
           </p>
           <p className="rounded-[1rem] bg-[#f2f4ff] px-[1.6rem] py-2 text-[1.3rem] font-semibold capitalize text-[#4661e6]">
@@ -94,7 +94,7 @@ function FeedbackDetail() {
           </p>
         </div>
 
-        <div className="tablet:row-start-2 tablet:col-start-3 flex items-center ">
+        <div className="flex items-center tablet:col-start-3 tablet:row-start-2 ">
           <FaComment size={"2rem"} color="#cdd2ee" />
           <p className="pl-4 text-[1.6rem] font-bold tracking-[-0.0222rem] text-[#3a4374]">
             {getFeedback?.comments.length}
@@ -102,7 +102,7 @@ function FeedbackDetail() {
         </div>
       </div>
 
-      <div className="tablet:px-[2.4rem] space-y-[3.2rem] divide-y divide-[#8c92b3] divide-opacity-25 bg-white px-[3.2rem] pb-[4.8rem] pt-[2.4rem]">
+      <div className="space-y-[3.2rem] divide-y divide-[#8c92b3] divide-opacity-25 bg-white px-[3.2rem] pb-[4.8rem] pt-[2.4rem] tablet:px-[2.4rem] tablet:pt-0">
         {getFeedback?.comments.map((comment: commentType) => (
           <FeedbackComments
             key={comment._id}
@@ -116,7 +116,7 @@ function FeedbackDetail() {
       </div>
 
       <form
-        className="bg-white px-[3.4rem] py-[2.4rem]"
+        className="bg-white px-[3.4rem] py-[2.4rem] tablet:px-8"
         onSubmit={handlePostComment}
       >
         <h3 className="pb-[2.4rem] text-[1.8rem] font-bold tracking-[-0.025rem] text-[#3a4374]">
@@ -137,11 +137,11 @@ function FeedbackDetail() {
         />
 
         <div className="flex items-center justify-between pt-[1.6rem]">
-          <p className="text-[1.5rem] text-[#647196]">
+          <p className="text-[1.5rem] text-[#647196] tablet:text-[1.3rem]">
             {250 - commentText.length} Characters left
           </p>
           <button
-            className="rounded-[1rem] bg-[#ad1fea] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe] disabled:cursor-not-allowed disabled:bg-[#999]"
+            className="rounded-[1rem] bg-[#ad1fea] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe] disabled:cursor-not-allowed disabled:bg-[#999] tablet:px-[1.6rem]"
             disabled={commentText.length < 3}
           >
             Post Comment

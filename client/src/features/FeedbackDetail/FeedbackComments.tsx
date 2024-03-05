@@ -66,7 +66,7 @@ function FeedbackComments({
   return (
     <div className="relative">
       {(isDeletingComment || isEditingComment) && <TransparentLoader />}
-      <div className="tablet:gap-x-[1.6rem] grid grid-cols-[auto_1fr_auto] gap-x-[3.2rem] gap-y-[1.7rem] pt-[3.2rem]">
+      <div className="grid grid-cols-[auto_1fr_auto] gap-x-[3.2rem] gap-y-[1.7rem] pt-[3.2rem] tablet:gap-x-[1.6rem]">
         <img
           src={comment.user.image}
           alt={`image of ${comment.user.username}`}
@@ -74,17 +74,17 @@ function FeedbackComments({
         />
 
         <div className="flex flex-col">
-          <h2 className="tablet:text-[1.3rem] tablet:tracking-[-0.0181rem] text-[1.4rem] font-bold tracking-[-0.0194rem] text-[#3a4374]">
+          <h2 className="text-[1.4rem] font-bold tracking-[-0.0194rem] text-[#3a4374] tablet:text-[1.3rem] tablet:tracking-[-0.0181rem]">
             {comment.user.name}
           </h2>
-          <p className="tablet:text-[1.3rem] text-[1.4rem]  text-[#647196]">
+          <p className="text-[1.4rem] text-[#647196]  tablet:text-[1.3rem]">
             @{comment.user.username}
           </p>
         </div>
 
-        <div className="tablet:relative flex">
+        <div className="flex tablet:relative">
           <div
-            className={`tablet:absolute tablet:top-0 tablet:bg-white tablet:flex-col tablet:items-start tablet:shadow-modal-sh tablet:left-[-10.5rem] tablet:rounded-[1rem] tablet:py-4 tablet:px-12 flex items-center gap-4 ${openMobileModal ? "tablet:flex" : "tablet:hidden"}`}
+            className={`flex items-center gap-4 tablet:absolute tablet:left-[-10.5rem] tablet:top-0 tablet:flex-col tablet:items-start tablet:rounded-[1rem] tablet:bg-white tablet:px-12 tablet:py-4 tablet:shadow-modal-sh ${openMobileModal ? "tablet:flex" : "tablet:hidden"}`}
           >
             <button
               className="text-[1.3rem] font-semibold text-[#d73737] hover:underline"
@@ -106,7 +106,7 @@ function FeedbackComments({
             </button>
           </div>
           <button
-            className="tablet:block hidden"
+            className="hidden tablet:block"
             onClick={() => setOpenMobileModal((prev) => !prev)}
           >
             <TbDotsVertical size="2rem" />
@@ -123,7 +123,7 @@ function FeedbackComments({
             handleCloseEditForm={handleCloseEditForm}
           />
         ) : (
-          <p className="tablet:text-[1.3rem] col-start-2  col-end-4 text-[1.5rem] text-[#647196]">
+          <p className="col-start-2 col-end-4 text-[1.5rem]  text-[#647196] tablet:col-start-1 tablet:text-[1.3rem]">
             {comment.content}
           </p>
         )}
