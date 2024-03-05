@@ -112,7 +112,7 @@ function EditFeedback() {
                 type="text"
                 id="title"
                 defaultValue={getFeedback.title}
-                className={`w-full rounded-[0.5rem] border border-solid bg-[#f7f8fd] px-[2.4rem] py-[1.2rem] text-[1.5rem] text-[#3a4374] outline-none tablet:text-[1.3rem] ${errors?.title?.message ? "border-[#d73737] focus:border-[#d73737] focus:outline-[#d73737]" : "border-transparent focus:border-[#4661e6] focus:outline-[#4661e6]"}`}
+                className={`w-full rounded-[0.5rem] border border-solid border-transparent bg-[#f7f8fd] px-[2.4rem] py-[1.2rem] text-[1.5rem] text-[#3a4374] outline-transparent tablet:text-[1.3rem] ${errors?.title?.message ? "border-[#d73737] focus:border-[#d73737] focus:outline-[#d73737]" : "border-transparent focus:border-[#4661e6] focus:outline-[#4661e6]"}`}
                 {...register("title", {
                   required: "Can't be empty",
                   minLength: {
@@ -306,7 +306,7 @@ function EditFeedback() {
                 id="detail"
                 rows={4}
                 defaultValue={getFeedback?.description}
-                className={`w-full resize-none rounded-[0.5rem] border border-solid bg-[#f7f8fd] px-[2.4rem] py-[1.2rem] text-[1.5rem] text-[#3a4374] outline-none tablet:text-[1.3rem] ${errors?.detail?.message ? "border-[#d73737] focus:border-[#d73737] focus:outline-[#d73737]" : "border-transparent focus:border-[#4661e6] focus:outline-[#4661e6]"}`}
+                className={`w-full resize-none rounded-[0.5rem] border border-solid border-transparent bg-[#f7f8fd] px-[2.4rem] py-[1.2rem] text-[1.5rem] text-[#3a4374] outline-transparent tablet:text-[1.3rem] ${errors?.detail?.message ? "border-[#d73737] focus:border-[#d73737] focus:outline-[#d73737]" : "border-transparent focus:border-[#4661e6] focus:outline-[#4661e6]"}`}
                 {...register("detail", {
                   required: "Can't be empty",
                   minLength: {
