@@ -5,6 +5,7 @@ import { FaCheck } from "react-icons/fa6";
 import { useCreateFeedback } from "./useCreateFeedback";
 import TransparentLoader from "../../ui/TransparentLoader";
 import NavigateBack from "../../ui/NavigateBack";
+import { useNavigate } from "react-router-dom";
 
 type feedbackState = {
   title: string;
@@ -14,6 +15,8 @@ type feedbackState = {
 function CreateFeedback() {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [category, setCategory] = useState("Feature");
+
+  const navigate = useNavigate();
 
   const { createFeedback, isCreatingFeedback } = useCreateFeedback();
 
@@ -207,7 +210,10 @@ function CreateFeedback() {
           <button
             type="button"
             className="rounded-[1rem] bg-[#3a4374] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe] transition-all duration-300 hover:bg-[#656ea3]"
-            onClick={() => reset()}
+            onClick={() => {
+              reset();
+              navigate(-1);
+            }}
           >
             Cancel
           </button>

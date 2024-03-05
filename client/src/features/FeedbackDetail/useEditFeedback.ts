@@ -16,7 +16,7 @@ export function useEditFeedback() {
     }) => editFeedbackApi({ id: feedbackId!, ...data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["feedback", feedbackId] });
-      navigate(`/feedback-detail/${feedbackId}`);
+      navigate(-1);
     },
   });
 
