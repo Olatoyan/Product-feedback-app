@@ -100,7 +100,9 @@ function FeedbackDetail() {
         </div>
       </div>
 
-      <div className="space-y-[3.2rem] divide-y divide-[#8c92b3] divide-opacity-25 bg-white px-[3.2rem] pb-[4.8rem] pt-[2.4rem] tablet:px-[2.4rem] tablet:pt-0">
+      <div
+        className={`space-y-[3.2rem] divide-y divide-[#8c92b3] divide-opacity-25 bg-white px-[3.2rem] pb-[4.8rem] pt-[2.4rem] tablet:px-[2.4rem] tablet:pt-0 ${getFeedback?.comments.length === 0 ? "hidden" : ""}`}
+      >
         {getFeedback?.comments.map((comment: commentType) => (
           <FeedbackComments
             key={comment._id}

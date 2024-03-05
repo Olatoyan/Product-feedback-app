@@ -54,7 +54,7 @@ function PostReply({
             setValueText(e.target.value);
           }
         }}
-        className={`w-[75%] resize-none rounded-[0.5rem] border border-solid border-transparent bg-[#f7f8fd] px-[2.4rem] py-[1.2rem] text-[1.5rem] text-[#3a4374] tablet:w-full ${valueText.length < 3 ? "border-[#d73737] focus:border-[#d73737] focus:outline-[#d73737]" : "focus:border-[#4661e6] focus:outline-[#4661e6]"}`}
+        className={`w-[75%] resize-none rounded-[0.5rem] border border-solid border-transparent bg-[#f7f8fd] px-[2.4rem] py-[1.2rem] outline-none text-[1.5rem] text-[#3a4374] tablet:w-full ${valueText.length < 3 ? "border-[#d73737] focus:border-[#d73737] focus:outline-[#d73737]" : "focus:border-[#4661e6] focus:outline-[#4661e6]"}`}
       />
 
       <div className="flex flex-col items-center justify-between gap-8 tablet:items-stretch">
