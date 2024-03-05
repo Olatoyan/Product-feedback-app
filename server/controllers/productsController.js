@@ -236,7 +236,6 @@ exports.findProduct = catchAsync(async (req, res, next) => {
   });
 });
 exports.deleteProduct = catchAsync(async (req, res, next) => {
-  // Find the product and populate its comments with user and replies
   const product = await Product.findById(req.query.id)
     .populate({
       path: "comments",
@@ -256,15 +255,12 @@ exports.deleteProduct = catchAsync(async (req, res, next) => {
     return next(new AppError("A product with that ID was not found", 404));
   }
 
-  // Iterate through the comments and delete their associated replies
   for (const comment of product.comments) {
     await Reply.deleteMany({ _id: { $in: comment.replies } });
   }
 
-  // Delete the comments
   await Comment.deleteMany({ _id: { $in: product.comments } });
 
-  // Finally, delete the product
   await Product.deleteOne({ _id: product._id });
 
   res.status(204).json({
@@ -279,7 +275,7 @@ exports.increaseUpvotes = catchAsync(async (req, res, next) => {
     return next(new AppError("A product with that ID was not found", 404));
   }
   product.upvotes += 1;
-  await product.save(); // Save the updated product after incrementing upvotes
+  await product.save();
   res.status(200).json({
     status: "success",
     data: {
