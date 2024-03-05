@@ -34,9 +34,14 @@ function PostReply({
     );
   }
 
+  function closeModal() {
+    onOpenReply("");
+    setValueText("");
+  }
+
   return (
     <form
-      className="flex w-[90%] gap-8 bg-white px-[3.4rem] py-[2.4rem]"
+      className="tablet:w-full flex w-[90%] gap-8 bg-white px-[3.4rem] py-[2.4rem]"
       onSubmit={handleSubmit}
     >
       <textarea
@@ -50,7 +55,7 @@ function PostReply({
             setValueText(e.target.value);
           }
         }}
-        className={`w-[75%] resize-none rounded-[0.5rem] border border-solid border-transparent bg-[#f7f8fd] px-[2.4rem] py-[1.2rem] text-[1.5rem]  text-[#3a4374] ${valueText.length < 3 ? "border-[#d73737] focus:border-[#d73737] focus:outline-[#d73737]" : "focus:border-[#4661e6] focus:outline-[#4661e6]"}`}
+        className={`tablet:w-[50%] w-[75%] resize-none rounded-[0.5rem] border border-solid border-transparent bg-[#f7f8fd] px-[2.4rem] py-[1.2rem] text-[1.5rem]  text-[#3a4374] ${valueText.length < 3 ? "border-[#d73737] focus:border-[#d73737] focus:outline-[#d73737]" : "focus:border-[#4661e6] focus:outline-[#4661e6]"}`}
       />
 
       <div className="flex flex-col items-center justify-between gap-8">
@@ -64,6 +69,13 @@ function PostReply({
           {250 - valueText.length} Chars left
         </p>
       </div>
+      <button
+        type="button"
+        className="self-start rounded-[1rem] bg-[#3a4374] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe] transition-all duration-300 hover:bg-[#656ea3]"
+        onClick={closeModal}
+      >
+        Cancel
+      </button>
     </form>
   );
 }
