@@ -17,6 +17,10 @@ export default {
         "suggestion-mobile":
           "url('../suggestions/mobile/background-header.png')",
       },
+      screens: {
+        laptop: { max: "64em" },
+        tablet: { max: "43.75em" },
+      },
     },
   },
   plugins: [],

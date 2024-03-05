@@ -44,9 +44,9 @@ function HomeSuggestionsSection({
   }
 
   return (
-    <section>
-      <header className="flex items-center gap-[3.8rem] rounded-[1rem] bg-[#373f68] px-[2.4rem] py-[1.4rem]">
-        <div className="flex items-center gap-8">
+    <section className="">
+      <header className="tablet:rounded-none tablet:px-8 tablet:gap-6 flex items-center gap-[3.8rem] rounded-[1rem] bg-[#373f68] px-[2.4rem] py-[1.4rem]">
+        <div className="tablet:hidden flex items-center gap-8">
           <img
             src="./suggestions/icon-suggestions.svg"
             alt="suggestions icon"
@@ -60,9 +60,13 @@ function HomeSuggestionsSection({
           className="relative flex cursor-pointer items-center gap-6"
           onClick={() => setIsOpen(!isOpen)}
         >
-          <p className="text-[1.4rem] text-[#f2f4fe]">Sort by</p>
+          <p className="tablet:text-[1.3rem] text-[1.4rem] text-[#f2f4fe]">
+            Sort by
+          </p>
           <button className="flex items-center gap-2 text-[#f2f4fe]">
-            <span className="text-[1.4rem] font-bold">{unSlugify(sortBy)}</span>
+            <span className="tablet:text-[1.3rem] text-[1.4rem] font-bold">
+              {unSlugify(sortBy)}
+            </span>
             <RiArrowDownSLine
               size={"2rem"}
               className={`${isOpen ? "rotate-180" : "rotate-0 "} transition-all duration-300 `}
@@ -137,15 +141,17 @@ function HomeSuggestionsSection({
 
         <Link
           to="/create-feedback"
-          className="ml-auto flex items-center gap-1 rounded-[1rem] bg-[#ad1fea] px-[2.4rem] py-5 text-[#f2f4fe] transition-all duration-300 hover:bg-[#c75af6]"
+          className="tablet:py-4 tablet:px-6 ml-auto flex items-center gap-1 rounded-[1rem] bg-[#ad1fea] px-[2.4rem] py-5 text-[#f2f4fe] transition-all duration-300 hover:bg-[#c75af6]"
         >
           <HiPlusSmall size={"2rem"} />
-          <span className="text-[1.4rem] font-bold">Add Feedback</span>
+          <span className="tablet:text-[1.3rem] text-[1.4rem] font-bold">
+            Add Feedback
+          </span>
         </Link>
       </header>
 
       {getSuggestedFeedbacks.length > 0 ? (
-        <div className="flex flex-col gap-8 pt-[2.4rem]">
+        <div className="tablet:px-[2.4rem] flex flex-col gap-8 pt-[2.4rem]">
           {getSuggestedFeedbacks.map((feedback) => (
             <HomeSuggestionBox key={feedback._id} feedback={feedback} />
           ))}

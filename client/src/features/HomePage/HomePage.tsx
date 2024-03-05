@@ -33,7 +33,7 @@ function HomePage() {
     return <Loader />;
 
   return (
-    <div className="grid grid-cols-[auto_1fr] gap-12 p-16">
+    <div className="tablet:gap-0 tablet:p-0 grid grid-cols-[auto_1fr] gap-12 p-16 laptop:grid-cols-1 laptop:grid-rows-[auto_1fr]">
       <Sidebar allFeedbacks={allFeedbacks} />
       <HomeSuggestionsSection getSuggestedFeedbacks={getSuggestedFeedbacks} />
     </div>
