@@ -1,4 +1,6 @@
-const BASE_URL = "http://127.0.0.1:5000/product-api/user";
+// const BASE_URL = "http://127.0.0.1:5000/product-api/user";
+const BASE_URL =
+  "https://toyan-product-feedback-app-api.vercel.app/product-api/user";
 
 export async function getAllFeedbacksApi() {
   try {
