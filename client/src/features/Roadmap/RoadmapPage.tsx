@@ -21,7 +21,6 @@ function RoadmapPage() {
     (data: productType) => data.status === "in-progress",
   );
 
-  console.log({ liveData, plannedData, inProgressData });
   const isMobile = window.innerWidth <= 700;
 
   return (

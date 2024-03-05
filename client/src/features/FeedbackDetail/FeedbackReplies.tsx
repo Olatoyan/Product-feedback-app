@@ -36,7 +36,6 @@ function FeedbackReplies({
   const [editText, setEditText] = useState(reply?.content);
   const [openMobileModal, setOpenMobileModal] = useState(false);
 
-  console.log(reply);
   function handleReply() {
     onOpenReply(reply._id);
     setOpenMobileModal(false);

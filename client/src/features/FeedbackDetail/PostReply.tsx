@@ -23,7 +23,6 @@ function PostReply({
 }) {
   function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log(id, username);
     postReply(
       { comment: valueText, id, username },
       {

@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { useIncreaseUpvotes } from "./useIncreaseUpvotes";
 
 function HomeSuggestionBox({ feedback }: { feedback: productType }) {
-  console.log(feedback.comments.length);
   const { increaseUpvotes, isIncreasing } = useIncreaseUpvotes();
   return (
     <Link

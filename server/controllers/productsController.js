@@ -30,48 +30,71 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllSuggestedProducts = catchAsync(async (req, res, next) => {
-  console.log(req.query);
-  console.log(req.query.category);
-
-  let query = Product.find().where("status").equals("suggestion");
-
+  const matchStage = { status: "suggestion" };
   if (req.query.category && req.query.category !== "all") {
-    query = query.where("category").equals(req.query.category);
+    matchStage.category = req.query.category;
   }
 
   let sortBy = {};
-
   if (req.query.sortBy === "most-upvotes") {
     sortBy = { upvotes: -1 };
-  }
-
-  if (req.query.sortBy === "least-upvotes") {
+  } else if (req.query.sortBy === "least-upvotes") {
     sortBy = { upvotes: 1 };
+  } else if (req.query.sortBy === "most-comments") {
+    sortBy = { numComments: -1 };
+  } else if (req.query.sortBy === "least-comments") {
+    sortBy = { numComments: 1 };
   }
 
-  if (req.query.sortBy === "most-comments") {
-    sortBy = { comments: -1 };
-  }
-
-  if (req.query.sortBy === "least-comments") {
-    sortBy = { comments: 1 };
-  }
-
-  const products = await query
-    .sort(sortBy)
-    .populate({
-      path: "comments",
-      select: "-__v",
-      populate: [
-        { path: "user", select: "-__v" },
-        {
-          path: "replies",
-          select: "-__v",
-          populate: { path: "user", select: "-__v" },
+  const aggregationPipeline = [
+    {
+      $match: matchStage,
+    },
+    {
+      $addFields: {
+        numComments: { $size: "$comments" },
+      },
+    },
+    {
+      $lookup: {
+        from: "comments",
+        localField: "comments",
+        foreignField: "_id",
+        as: "comments",
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        title: 1,
+        category: 1,
+        upvotes: 1,
+        status: 1,
+        description: 1,
+        numComments: 1,
+        comments: {
+          $map: {
+            input: "$comments",
+            as: "comment",
+            in: {
+              $mergeObjects: [
+                "$$comment",
+                {
+                  user: { $arrayElemAt: ["$comments.user", 0] },
+                  replies: { $ifNull: ["$comments.replies", []] },
+                },
+              ],
+            },
+          },
         },
-      ],
-    })
-    .select("-__v");
+      },
+    },
+    {
+      $sort: sortBy,
+    },
+  ];
+
+  const products = await Product.aggregate(aggregationPipeline);
 
   res.status(200).json({
     status: "success",
@@ -81,6 +104,57 @@ exports.getAllSuggestedProducts = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+// exports.getAllSuggestedProducts = catchAsync(async (req, res, next) => {
+
+//   let query = Product.find().where("status").equals("suggestion");
+
+//   if (req.query.category && req.query.category !== "all") {
+//     query = query.where("category").equals(req.query.category);
+//   }
+
+//   let sortBy = {};
+
+//   if (req.query.sortBy === "most-upvotes") {
+//     sortBy = { upvotes: -1 };
+//   }
+
+//   if (req.query.sortBy === "least-upvotes") {
+//     sortBy = { upvotes: 1 };
+//   }
+
+//   if (req.query.sortBy === "most-comments") {
+//     sortBy = { "comments.length": -1 };
+//   }
+
+//   if (req.query.sortBy === "least-comments") {
+//     sortBy = { "comments.length": 1 };
+//   }
+
+//   const products = await query
+//     .sort(sortBy)
+//     .populate({
+//       path: "comments",
+//       select: "-__v",
+//       populate: [
+//         { path: "user", select: "-__v" },
+//         {
+//           path: "replies",
+//           select: "-__v",
+//           populate: { path: "user", select: "-__v" },
+//         },
+//       ],
+//     })
+//     .select("-__v");
+
+//   res.status(200).json({
+//     status: "success",
+//     results: products.length,
+//     data: {
+//       products,
+//     },
+//   });
+// });
 
 exports.createProduct = catchAsync(async (req, res, next) => {
   const { title, category, detail } = req.body;

@@ -37,7 +37,7 @@ function FeedbackComments({
   const [editText, setEditText] = useState(comment?.content);
   const [openMobileModal, setOpenMobileModal] = useState(false);
   function handleCommentReply() {
-    console.log(comment);
+    
     onOpenReply(comment._id);
     setOpenMobileModal(false);
   }

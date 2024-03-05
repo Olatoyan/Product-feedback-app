@@ -32,8 +32,6 @@ export async function getAllSuggestedFeedbackApi(
       url = `${url}?category=${category}&sortBy=${sortBy}`;
     }
 
-    console.log(url);
-
     const response = await fetch(url);
     const data = await response.json();
 
@@ -48,7 +46,7 @@ export async function getProductApi(id: string) {
   try {
     const response = await fetch(`${BASE_URL}/getProduct?id=${id}`);
     const data = await response.json();
-    console.log(data);
+
     return data;
   } catch (error) {
     console.error(error);
@@ -65,7 +63,6 @@ export async function createFeedBackApi({
   category: string;
   detail: string;
 }) {
-  console.log(title, category, detail);
   try {
     const response = await fetch(`${BASE_URL}/createProduct`, {
       method: "POST",
@@ -75,9 +72,8 @@ export async function createFeedBackApi({
       body: JSON.stringify({ title, category, detail }),
     });
 
-    console.log(response);
     const data = await response.json();
-    console.log(data);
+
     return data;
   } catch (error) {
     console.error(error);
@@ -147,7 +143,7 @@ export async function postReplyApi({
       body: JSON.stringify({ comment, id, username }),
     });
     const data = await response.json();
-    console.log(data);
+
     return data;
   } catch (error) {
     console.error(error);
@@ -170,7 +166,7 @@ export async function postCommentApi({
       body: JSON.stringify({ comment, id }),
     });
     const data = await response.json();
-    console.log(data);
+
     return data;
   } catch (error) {
     console.error(error);
@@ -186,9 +182,9 @@ export async function increaseUpvotesApi(id: string) {
         "Content-Type": "application/json",
       },
     });
-    console.log(response);
+
     const data = await response.json();
-    console.log(data);
+
     return data;
   } catch (error) {
     console.error(error);

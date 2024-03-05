@@ -71,8 +71,6 @@ function FeedbackDetail() {
         <button
           className="flex flex-col items-center self-start rounded-[1rem] bg-[#f2f4fe] p-4 text-[#4661e6] transition-all duration-300 hover:bg-[#cfd7ff] tablet:col-start-1 tablet:row-start-2 tablet:flex-row tablet:gap-3"
           onClick={() => {
-            // e.preventDefault()
-            // e.stopPropagation()
             increaseUpvotes(feedbackId!);
           }}
         >

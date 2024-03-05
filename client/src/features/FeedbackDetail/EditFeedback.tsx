@@ -58,7 +58,7 @@ function EditFeedback() {
   }
 
   function onSubmit(data: feedbackState) {
-    // console.log("submit", data);
+    
     editFeedback({
       title: data.title,
       detail: data.detail,

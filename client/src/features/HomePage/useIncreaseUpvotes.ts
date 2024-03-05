@@ -10,6 +10,5 @@ export function useIncreaseUpvotes() {
     },
   });
 
-  console.log(isIncreasing);
   return { increaseUpvotes, isIncreasing };
 }

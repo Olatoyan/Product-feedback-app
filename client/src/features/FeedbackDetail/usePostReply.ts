@@ -8,7 +8,6 @@ export function usePostReply() {
     mutationFn: (data: { comment: string; id: string; username: string }) =>
       postReplyApi(data),
     onSuccess: () => {
-      console.log("success");
       queryClient.invalidateQueries({ queryKey: ["feedback"] });
     },
   });

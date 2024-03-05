@@ -15,7 +15,6 @@ function HomeSuggestionsSection({
 }: {
   getSuggestedFeedbacks: productType[];
 }) {
-  console.log(getSuggestedFeedbacks);
   const [searchParams] = useSearchParams();
 
   const isCategoryInQuery = searchParams.get("category");
