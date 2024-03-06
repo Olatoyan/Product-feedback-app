@@ -44,14 +44,14 @@ function HomeSuggestionsSection({
 
   return (
     <section className="">
-      <header className="tablet:rounded-none tablet:px-8 tablet:gap-6 flex items-center gap-[3.8rem] rounded-[1rem] bg-[#373f68] px-[2.4rem] py-[1.4rem]">
-        <div className="tablet:hidden flex items-center gap-8">
+      <header className="flex items-center gap-[3.8rem] rounded-[1rem] bg-[#373f68] px-[2.4rem] py-[1.4rem] tablet:gap-6 tablet:rounded-none tablet:px-8">
+        <div className="flex items-center gap-8 tablet:hidden">
           <img
             src="./suggestions/icon-suggestions.svg"
             alt="suggestions icon"
           />
           <h2 className="text-[1.8rem] font-bold tracking-[-0.025rem] text-white">
-            {getSuggestedFeedbacks.length} Suggestions
+            {getSuggestedFeedbacks?.length} Suggestions
           </h2>
         </div>
 
@@ -59,11 +59,11 @@ function HomeSuggestionsSection({
           className="relative flex cursor-pointer items-center gap-6"
           onClick={() => setIsOpen(!isOpen)}
         >
-          <p className="tablet:text-[1.3rem] text-[1.4rem] text-[#f2f4fe]">
+          <p className="text-[1.4rem] text-[#f2f4fe] tablet:text-[1.3rem]">
             Sort by
           </p>
           <button className="flex items-center gap-2 text-[#f2f4fe]">
-            <span className="tablet:text-[1.3rem] text-[1.4rem] font-bold">
+            <span className="text-[1.4rem] font-bold tablet:text-[1.3rem]">
               {unSlugify(sortBy)}
             </span>
             <RiArrowDownSLine
@@ -140,18 +140,18 @@ function HomeSuggestionsSection({
 
         <Link
           to="/create-feedback"
-          className="tablet:py-4 tablet:px-6 ml-auto flex items-center gap-1 rounded-[1rem] bg-[#ad1fea] px-[2.4rem] py-5 text-[#f2f4fe] transition-all duration-300 hover:bg-[#c75af6]"
+          className="ml-auto flex items-center gap-1 rounded-[1rem] bg-[#ad1fea] px-[2.4rem] py-5 text-[#f2f4fe] transition-all duration-300 hover:bg-[#c75af6] tablet:px-6 tablet:py-4"
         >
           <HiPlusSmall size={"2rem"} />
-          <span className="tablet:text-[1.3rem] text-[1.4rem] font-bold">
+          <span className="text-[1.4rem] font-bold tablet:text-[1.3rem]">
             Add Feedback
           </span>
         </Link>
       </header>
 
-      {getSuggestedFeedbacks.length > 0 ? (
-        <div className="tablet:px-[2.4rem] flex flex-col gap-8 pt-[2.4rem]">
-          {getSuggestedFeedbacks.map((feedback) => (
+      {getSuggestedFeedbacks?.length > 0 ? (
+        <div className="flex flex-col gap-8 pt-[2.4rem] tablet:px-[2.4rem]">
+          {getSuggestedFeedbacks?.map((feedback) => (
             <HomeSuggestionBox key={feedback._id} feedback={feedback} />
           ))}
         </div>
