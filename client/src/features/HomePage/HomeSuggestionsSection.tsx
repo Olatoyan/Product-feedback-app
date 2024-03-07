@@ -12,12 +12,14 @@ import EmptySuggestions from "./EmptySuggestions";
 
 import { MdLogout } from "react-icons/md";
 import { useLogout } from "../../authentication/useLogout";
+import Cookie from "js-cookie";
 
 function HomeSuggestionsSection({
   getSuggestedFeedbacks,
 }: {
   getSuggestedFeedbacks: productType[];
 }) {
+  const currentUserId = Cookie.get("userId");
   const [searchParams] = useSearchParams();
 
   const isCategoryInQuery = searchParams.get("category");
@@ -46,6 +48,8 @@ function HomeSuggestionsSection({
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
   }
+
+  
 
   return (
     <section className="">
@@ -153,7 +157,9 @@ function HomeSuggestionsSection({
           </span>
         </Link>
         <button onClick={() => logout()}>
-          <MdLogout className="flex h-[4rem] w-[4rem] cursor-pointer items-center justify-center rounded-[1rem] bg-white p-4 tablet:hidden" />
+          {currentUserId && (
+            <MdLogout className="flex h-[4rem] w-[4rem] cursor-pointer items-center justify-center rounded-[1rem] bg-white p-4 tablet:hidden" />
+          )}
         </button>
       </header>
 

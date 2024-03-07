@@ -8,8 +8,10 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { MdLogout } from "react-icons/md";
 import { useLogout } from "../../authentication/useLogout";
+import Cookie from "js-cookie";
 
 function Sidebar({ allFeedbacks }: { allFeedbacks: productType[] }) {
+  const currentUserId = Cookie.get("userId");
   const { logout } = useLogout();
   const [isNavOpen, setIsNavOpen] = useState(false);
 
@@ -38,10 +40,12 @@ function Sidebar({ allFeedbacks }: { allFeedbacks: productType[] }) {
           </h2>
         </div>
 
-        <MdLogout
-          className="ml-auto mr-16 hidden h-[4rem] w-[4rem] cursor-pointer items-center justify-center rounded-[1rem] bg-white p-4 tablet:flex"
-          onClick={() => logout()}
-        />
+        {currentUserId && (
+          <MdLogout
+            className="ml-auto mr-16 hidden h-[4rem] w-[4rem] cursor-pointer items-center justify-center rounded-[1rem] bg-white p-4 tablet:flex"
+            onClick={() => logout()}
+          />
+        )}
         <button className="hidden tablet:flex" onClick={handleToggleNav}>
           <AnimatePresence>
             {isNavOpen ? (
