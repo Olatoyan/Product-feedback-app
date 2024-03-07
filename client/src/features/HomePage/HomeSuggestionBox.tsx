@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 function HomeSuggestionBox({ feedback }: { feedback: productType }) {
   const currentUserId = Cookies.get("userId");
   const userUpvotes = Cookies.get("userUpvotes");
-  const isUpvoted = userUpvotes!.includes(feedback._id);
+  const isUpvoted = userUpvotes?.includes(feedback._id);
 
   const { increaseUpvotes, isIncreasing } = useIncreaseUpvotes();
   return (

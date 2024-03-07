@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 function RoadmapStatusBox({ data }: { data: productType }) {
   const currentUserId = Cookies.get("userId");
   const userUpvotes = Cookies.get("userUpvotes");
-  const isUpvoted = userUpvotes!.includes(data._id);
+  const isUpvoted = userUpvotes?.includes(data._id);
 
   const { increaseUpvotes, isIncreasing } = useIncreaseUpvotes();
   return (
