@@ -4,11 +4,14 @@ import { productType } from "../../types/types";
 import { Link } from "react-router-dom";
 import { useIncreaseUpvotes } from "./useIncreaseUpvotes";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 function HomeSuggestionBox({ feedback }: { feedback: productType }) {
   const currentUserId = Cookies.get("userId") ?? "";
   const userUpvotes = Cookies.get("userUpvotes") ?? "";
   const isUpvoted = userUpvotes?.includes(feedback._id);
+
+  const navigate = useNavigate();
 
   const { increaseUpvotes, isIncreasing } = useIncreaseUpvotes();
   return (
@@ -21,6 +24,9 @@ function HomeSuggestionBox({ feedback }: { feedback: productType }) {
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
+          if (!currentUserId) {
+            navigate("/login");
+          }
           increaseUpvotes({ id: feedback._id, user: currentUserId! });
         }}
         disabled={isIncreasing}

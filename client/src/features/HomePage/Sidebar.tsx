@@ -6,8 +6,11 @@ import { productType } from "../../types/types";
 import { useState } from "react";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { MdLogout } from "react-icons/md";
+import { useLogout } from "../../authentication/useLogout";
 
 function Sidebar({ allFeedbacks }: { allFeedbacks: productType[] }) {
+  const { logout } = useLogout();
   const [isNavOpen, setIsNavOpen] = useState(false);
 
   const liveData = allFeedbacks.filter((data) => data.status === "live");
@@ -24,18 +27,22 @@ function Sidebar({ allFeedbacks }: { allFeedbacks: productType[] }) {
     setIsNavOpen(false);
   }
   return (
-    <aside className="tablet:relative tablet:grid-cols-1 tablet:h-[7.5rem] max-w-[25.5rem] space-y-[2.4rem] laptop:grid laptop:h-[18rem] laptop:w-full laptop:max-w-full laptop:grid-cols-[1fr_2fr] laptop:gap-4 laptop:space-y-0">
-      <div className="tablet:bg-suggestion-mobile tablet:fixed tablet:w-full tablet:top-0 tablet:left-0 tablet:h-[inherit] tablet:pb-0 tablet:rounded-none z-[11] flex h-[13.7rem] items-center justify-between rounded-[1rem] bg-suggestion-desktop bg-cover px-6 pb-6 laptop:h-auto laptop:bg-suggestion-tablet">
-        <div className="tablet:self-center flex flex-col self-end">
-          <h1 className="tablet:text-[1.5rem] tablet:tracking-[-0.0187rem] text-[2rem] font-bold tracking-[-0.025rem] text-white">
+    <aside className="max-w-[25.5rem] space-y-[2.4rem] laptop:grid laptop:h-[18rem] laptop:w-full laptop:max-w-full laptop:grid-cols-[1fr_2fr] laptop:gap-4 laptop:space-y-0 tablet:relative tablet:h-[7.5rem] tablet:grid-cols-1">
+      <div className="z-[11] flex h-[13.7rem] items-center justify-between rounded-[1rem] bg-suggestion-desktop bg-cover px-6 pb-6 laptop:h-auto laptop:bg-suggestion-tablet tablet:fixed tablet:left-0 tablet:top-0 tablet:h-[inherit] tablet:w-full tablet:rounded-none tablet:bg-suggestion-mobile tablet:pb-0">
+        <div className="flex flex-col self-end tablet:self-center">
+          <h1 className="text-[2rem] font-bold tracking-[-0.025rem] text-white tablet:text-[1.5rem] tablet:tracking-[-0.0187rem]">
             Frontend Mentor
           </h1>
-          <h2 className="tablet:text-[1.3rem] text-[1.5rem] font-medium text-white text-opacity-75">
+          <h2 className="text-[1.5rem] font-medium text-white text-opacity-75 tablet:text-[1.3rem]">
             Feedback Board
           </h2>
         </div>
 
-        <button className="tablet:flex hidden" onClick={handleToggleNav}>
+        <MdLogout
+          className="ml-auto mr-16 hidden h-[4rem] w-[4rem] cursor-pointer items-center justify-center rounded-[1rem] bg-white p-4 tablet:flex"
+          onClick={() => logout()}
+        />
+        <button className="hidden tablet:flex" onClick={handleToggleNav}>
           <AnimatePresence>
             {isNavOpen ? (
               <motion.img
@@ -57,7 +64,7 @@ function Sidebar({ allFeedbacks }: { allFeedbacks: productType[] }) {
       </div>
 
       <div
-        className={`tablet:fixed tablet:top-[7.5rem] tablet:right-0 tablet:h-full tablet:bg-[#f7f8fd] tablet:flex tablet:flex-col tablet:w-[75%] z-[11] space-y-[2.4rem] laptop:grid laptop:grid-cols-2 laptop:gap-4 laptop:space-y-0 ${isNavOpen ? "tablet:block" : "tablet:hidden"}`}
+        className={`z-[11] space-y-[2.4rem] laptop:grid laptop:grid-cols-2 laptop:gap-4 laptop:space-y-0 tablet:fixed tablet:right-0 tablet:top-[7.5rem] tablet:flex tablet:h-full tablet:w-[75%] tablet:flex-col tablet:bg-[#f7f8fd] ${isNavOpen ? "tablet:block" : "tablet:hidden"}`}
       >
         <div className="flex flex-wrap items-center gap-x-[0.8rem] gap-y-8 rounded-[1rem] bg-white p-[2.4rem]">
           <SidebarCategories category="All" handleToggleNav={handleCloseNav} />

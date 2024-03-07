@@ -53,11 +53,12 @@ function FeedbackDetail() {
   }, [getFeedback, navigate, isGettingFeedback]);
 
   useEffect(() => {
-    if (!currentUserId) navigate("/signup");
-  });
+    if (!currentUserId) navigate("/login");
+  }, [currentUserId, navigate]);
 
   if (isGettingFeedback) return <Loader />;
 
+  const createdByUsername = getFeedback?.createdBy?.username;
   const createdBy = getFeedback?.createdBy?._id;
   const userUpvotes = Cookies.get("userUpvotes") || "";
   const isUpvoted = userUpvotes?.includes(getFeedback?._id);
@@ -79,7 +80,7 @@ function FeedbackDetail() {
           </Link>
         ) : (
           <p className="text-[1.4rem] font-bold tracking-[-0.0194rem] text-[#3a4374] tablet:text-[1.3rem] tablet:tracking-[-0.0181rem]">
-            Created By: {createdBy || "Toyan"}
+            Created By: {createdByUsername || "Toyan"}
           </p>
         )}
       </div>

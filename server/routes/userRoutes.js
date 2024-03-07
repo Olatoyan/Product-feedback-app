@@ -8,11 +8,12 @@ const router = express.Router();
 const { getUser, createUser, createReplies, createComments, createProducts } =
   userController;
 
-const { signup, login } = authController;
+const { signup, login, logout } = authController;
 
 router.route("/").get(getUser);
 router.route("/signup").post(signup);
 router.route("/login").post(login);
+router.route("/logout").post(logout);
 
 router.route("/create-user").post(createUser);
 router.route("/create-reply").post(createReplies);

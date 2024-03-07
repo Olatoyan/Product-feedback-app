@@ -8,6 +8,7 @@ import Loader from "../../ui/Loader";
 import { useDeleteFeedback } from "../FeedbackDetail/useDeleteFeedback";
 import { useIncreaseUpvotes } from "./useIncreaseUpvotes";
 import { useCreateFeedback } from "./useCreateFeedback";
+import { useLogout } from "../../authentication/useLogout";
 
 function HomePage() {
   const { getSuggestedFeedbacks, isPendingGetFeedbacks } =
@@ -16,6 +17,7 @@ function HomePage() {
   const { isCreatingFeedback } = useCreateFeedback();
   const { isDeletingFeedback } = useDeleteFeedback();
   const { isIncreasing } = useIncreaseUpvotes();
+  const { isLogoutPending } = useLogout();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -31,7 +33,8 @@ function HomePage() {
     isAllFeedbackPending ||
     isDeletingFeedback ||
     isCreatingFeedback ||
-    isIncreasing
+    isIncreasing ||
+    isLogoutPending
   )
     return <Loader />;
 

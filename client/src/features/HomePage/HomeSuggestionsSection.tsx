@@ -10,6 +10,9 @@ import { Link, useSearchParams } from "react-router-dom";
 import { productType } from "../../types/types";
 import EmptySuggestions from "./EmptySuggestions";
 
+import { MdLogout } from "react-icons/md";
+import { useLogout } from "../../authentication/useLogout";
+
 function HomeSuggestionsSection({
   getSuggestedFeedbacks,
 }: {
@@ -22,6 +25,8 @@ function HomeSuggestionsSection({
 
   const [isOpen, setIsOpen] = useState(false);
   const [sortBy, setIsSortBy] = useState(sortQuery || "most-upvotes");
+
+  const { logout } = useLogout();
 
   function handleClickSortBy(value: string) {
     setIsOpen(!isOpen);
@@ -44,7 +49,7 @@ function HomeSuggestionsSection({
 
   return (
     <section className="">
-      <header className="flex items-center gap-[3.8rem] rounded-[1rem] bg-[#373f68] px-[2.4rem] py-[1.4rem] tablet:gap-6 tablet:rounded-none tablet:px-8">
+      <header className="flex items-center gap-[3.8rem] rounded-[1rem] bg-[#373f68] px-[2.4rem] py-[1.4rem] tablet:gap-4 tablet:rounded-none tablet:px-8">
         <div className="flex items-center gap-8 tablet:hidden">
           <img
             src="./suggestions/icon-suggestions.svg"
@@ -56,7 +61,7 @@ function HomeSuggestionsSection({
         </div>
 
         <div
-          className="relative flex cursor-pointer items-center gap-6"
+          className="relative flex cursor-pointer items-center gap-6 tablet:gap-4"
           onClick={() => setIsOpen(!isOpen)}
         >
           <p className="text-[1.4rem] text-[#f2f4fe] tablet:text-[1.3rem]">
@@ -147,6 +152,9 @@ function HomeSuggestionsSection({
             Add Feedback
           </span>
         </Link>
+        <button onClick={() => logout()}>
+          <MdLogout className="flex h-[4rem] w-[4rem] cursor-pointer items-center justify-center rounded-[1rem] bg-white p-4 tablet:hidden" />
+        </button>
       </header>
 
       {getSuggestedFeedbacks?.length > 0 ? (

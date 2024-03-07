@@ -59,8 +59,34 @@ export async function loginApi({
     if (data.status === "fail") {
       throw new Error(data.message);
     }
-    Cookie.set("token", data.token);
-    Cookie.set("userId", data.data.user._id);
+
+    console.log(data);
+    Cookie.set("token", data?.token);
+    Cookie.set("userId", data?.data?.user?._id);
+    Cookie.set("userUpvotes", JSON.stringify(data.data.user.upvotedFeedbacks));
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function logoutApi() {
+  try {
+    const response = await fetch(`${BASE_URL}/logout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+
+    if (data.status === "fail") {
+      throw new Error(data.message);
+    }
+    Cookie.remove("token");
+    Cookie.remove("userId");
+    Cookie.remove("userUpvotes");
     return data;
   } catch (error) {
     console.error(error);
