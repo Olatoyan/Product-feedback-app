@@ -56,12 +56,10 @@ function FeedbackDetail() {
     if (!currentUserId) navigate("/signup");
   });
 
-  console.log(getFeedback);
-
   if (isGettingFeedback) return <Loader />;
 
   const createdBy = getFeedback?.createdBy?._id;
-  const userUpvotes = Cookies.get("userUpvotes") || '';
+  const userUpvotes = Cookies.get("userUpvotes") || "";
   const isUpvoted = userUpvotes?.includes(getFeedback?._id);
 
   return (

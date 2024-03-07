@@ -1,6 +1,6 @@
-const BASE_URL = "http://127.0.0.1:5000/product-api/user";
-// const BASE_URL =
-//   "https://toyan-product-feedback-app-api.vercel.app/product-api/user";
+// const BASE_URL = "http://127.0.0.1:5000/product-api/user";
+const BASE_URL =
+  "https://toyan-product-feedback-app-api.vercel.app/product-api/user";
 
 import Cookie from "js-cookie";
 
@@ -23,9 +23,9 @@ export async function signupApi({
       },
       body: JSON.stringify({ name, username, password, confirmPassword }),
     });
-    console.log(response);
+
     const data = await response.json();
-    console.log(data);
+
     if (data.status === "fail") {
       throw new Error(data.message);
     }
@@ -53,9 +53,9 @@ export async function loginApi({
       },
       body: JSON.stringify({ username, password }),
     });
-    console.log(response);
+
     const data = await response.json();
-    console.log(data);
+
     if (data.status === "fail") {
       throw new Error(data.message);
     }
@@ -261,7 +261,7 @@ export async function increaseUpvotesApi({
     });
 
     const data = await response.json();
-    console.log(data);
+
     Cookie.set("userUpvotes", JSON.stringify(data.user.upvotedFeedbacks));
     return data;
   } catch (error) {

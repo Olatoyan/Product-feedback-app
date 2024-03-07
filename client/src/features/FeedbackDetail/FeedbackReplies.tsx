@@ -67,7 +67,7 @@ function FeedbackReplies({
 
   const currentUserId = Cookies.get("userId") || "";
 
-  console.log(reply);
+
   const isSameUser = reply.user._id;
 
   return (

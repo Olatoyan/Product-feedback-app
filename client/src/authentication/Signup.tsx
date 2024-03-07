@@ -1,4 +1,3 @@
-// import { useState } from "react";
 import { useForm } from "react-hook-form";
 import NavigateBack from "../ui/NavigateBack";
 import { Link, useNavigate } from "react-router-dom";
@@ -22,12 +21,6 @@ function Signup() {
   const { errors } = formState;
 
   function onSubmit(data: feedbackState) {
-    // createFeedback({
-    //   title: data.title,
-    //   category,
-    //   detail: data.detail,
-    // });
-    console.log(data);
     signup(data);
   }
 

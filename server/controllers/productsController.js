@@ -67,8 +67,8 @@ exports.getAllSuggestedProducts = catchAsync(async (req, res, next) => {
     },
     {
       $lookup: {
-        from: "users", // Assuming your user collection is named "users"
-        localField: "createdBy", // Assuming "createdBy" is the reference to the user who created the product
+        from: "users",
+        localField: "createdBy",
         foreignField: "_id",
         as: "createdByUser",
       },
@@ -101,7 +101,7 @@ exports.getAllSuggestedProducts = catchAsync(async (req, res, next) => {
       },
     },
     {
-      $unset: "createdBy.password", // Exclude the password field from the output
+      $unset: "createdBy.password",
     },
     {
       $sort: sortBy,
@@ -293,20 +293,14 @@ exports.upvoteFeedback = catchAsync(async (req, res, next) => {
 
   const user = await User.findById(req.body.user);
 
-  // Check if the user has already upvoted the feedback
   const index = user.upvotedFeedbacks.indexOf(feedbackId);
   if (index !== -1) {
-    // If the user has already upvoted the feedback, remove their upvote (downvote)
     user.upvotedFeedbacks.splice(index, 1);
 
-    // Update the upvotes count for the feedback (downvote)
     await Product.findByIdAndUpdate(feedbackId, { $inc: { upvotes: -1 } });
   } else {
-    // If the user has not upvoted the feedback before, upvote it
-    // Update the upvotes count for the feedback (upvote)
     await Product.findByIdAndUpdate(feedbackId, { $inc: { upvotes: 1 } });
 
-    // Add the feedback's ID to the user's list of upvoted feedbacks
     user.upvotedFeedbacks.push(feedbackId);
   }
 
@@ -314,7 +308,6 @@ exports.upvoteFeedback = catchAsync(async (req, res, next) => {
     validateBeforeSave: false,
   });
 
-  // Retrieve the updated feedback
   const updatedFeedback = await Product.findById(feedbackId);
 
   res.status(200).json({

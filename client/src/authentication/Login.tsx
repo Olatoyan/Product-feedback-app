@@ -18,7 +18,6 @@ function Login() {
   const { errors } = formState;
 
   function onSubmit(data: feedbackState) {
-    console.log(data);
     login(data);
   }
 
