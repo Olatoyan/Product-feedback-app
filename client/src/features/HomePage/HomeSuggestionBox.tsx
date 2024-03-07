@@ -3,8 +3,13 @@ import { FaComment } from "react-icons/fa6";
 import { productType } from "../../types/types";
 import { Link } from "react-router-dom";
 import { useIncreaseUpvotes } from "./useIncreaseUpvotes";
+import Cookies from "js-cookie";
 
 function HomeSuggestionBox({ feedback }: { feedback: productType }) {
+  const currentUserId = Cookies.get("userId");
+  const userUpvotes = Cookies.get("userUpvotes");
+  const isUpvoted = userUpvotes!.includes(feedback._id);
+
   const { increaseUpvotes, isIncreasing } = useIncreaseUpvotes();
   return (
     <Link
@@ -12,16 +17,18 @@ function HomeSuggestionBox({ feedback }: { feedback: productType }) {
       className="group grid cursor-pointer grid-cols-[auto_1fr_auto] gap-16 rounded-[1rem] bg-white px-[3.2rem] py-[2.8rem] tablet:gap-8 tablet:px-8"
     >
       <button
-        className="flex flex-col items-center self-start rounded-[1rem] bg-[#f2f4fe] p-4 text-[#4661e6] transition-all duration-300 hover:bg-[#cfd7ff] disabled:bg-[#ccc] tablet:col-start-1 tablet:row-start-2 tablet:flex-row tablet:gap-3"
+        className={`flex flex-col items-center self-start rounded-[1rem] p-4 transition-all duration-300  disabled:bg-[#ccc] tablet:col-start-1 tablet:row-start-2 tablet:flex-row tablet:gap-3 ${isUpvoted ? "bg-[#4661e6] text-white" : "bg-[#f2f4fe] text-[#4661e6] hover:bg-[#cfd7ff]"}`}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          increaseUpvotes(feedback._id);
+          increaseUpvotes({ id: feedback._id, user: currentUserId! });
         }}
         disabled={isIncreasing}
       >
         <IoIosArrowUp size={"2rem"} />
-        <p className="text-[1.3rem] font-bold tracking-[-0.0181rem] text-[#3a4374]">
+        <p
+          className={`text-[1.3rem] font-bold tracking-[-0.0181rem] ${isUpvoted ? "text-white" : "text-[#3a4374]"}`}
+        >
           {feedback.upvotes}
         </p>
       </button>

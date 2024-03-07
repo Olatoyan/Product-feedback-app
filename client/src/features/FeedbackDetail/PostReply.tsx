@@ -1,5 +1,6 @@
 import { UseMutateFunction } from "@tanstack/react-query";
 import { SyntheticEvent } from "react";
+import Cookies from "js-cookie";
 
 function PostReply({
   valueText,
@@ -14,17 +15,19 @@ function PostReply({
   postReply: UseMutateFunction<
     unknown,
     Error,
-    { comment: string; id: string; username: string },
+    { comment: string; id: string; username: string; userId: string },
     unknown
   >;
   onOpenReply: (comment: string) => void;
   id: string;
   username: string;
 }) {
+  const currentUserId = Cookies.get("userId");
+
   function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
     postReply(
-      { comment: valueText, id, username },
+      { comment: valueText, id, username, userId: currentUserId! },
       {
         onSuccess: () => {
           onOpenReply("");

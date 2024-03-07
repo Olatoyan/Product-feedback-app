@@ -9,7 +9,7 @@ const handleDuplicateFieldsDB = (err) => {
   const fields = Object.keys(err.keyValue)[0];
   const value = err.keyValue[fields];
 
-  const message = `This email is already registered. Please use a different email address.`;
+  const message = `There's a user with this username, kindly choose another.`;
 
   return new AppError(message, 400);
 };

@@ -9,6 +9,10 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: [true, "Category is required"],
   },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
   upvotes: {
     type: Number,
     default: 0,
@@ -28,6 +32,7 @@ const productSchema = new mongoose.Schema({
     maxLength: [250, "Your description must be less than 250 characters"],
     trim: true,
   },
+
   comments: [
     {
       type: mongoose.Schema.Types.ObjectId,

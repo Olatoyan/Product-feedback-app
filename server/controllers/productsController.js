@@ -3,14 +3,15 @@ const catchAsync = require("./../utils/catchAsync");
 const AppError = require("./../utils/appError");
 const Reply = require("../models/repliesModel");
 const Comment = require("../models/commentModel");
+const User = require("../models/userModel");
 
 exports.getAllProducts = catchAsync(async (req, res, next) => {
   const products = await Product.find()
+    .populate("createdBy")
     .populate({
       path: "comments",
       select: "-__v",
       populate: [
-        { path: "user", select: "-__v" },
         {
           path: "replies",
           select: "-__v",
@@ -18,6 +19,7 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
         },
       ],
     })
+
     .select("-__v");
 
   res.status(200).json({
@@ -64,6 +66,14 @@ exports.getAllSuggestedProducts = catchAsync(async (req, res, next) => {
       },
     },
     {
+      $lookup: {
+        from: "users", // Assuming your user collection is named "users"
+        localField: "createdBy", // Assuming "createdBy" is the reference to the user who created the product
+        foreignField: "_id",
+        as: "createdByUser",
+      },
+    },
+    {
       $project: {
         _id: 1,
         title: 1,
@@ -72,6 +82,7 @@ exports.getAllSuggestedProducts = catchAsync(async (req, res, next) => {
         status: 1,
         description: 1,
         numComments: 1,
+        createdBy: { $arrayElemAt: ["$createdByUser", 0] },
         comments: {
           $map: {
             input: "$comments",
@@ -88,6 +99,9 @@ exports.getAllSuggestedProducts = catchAsync(async (req, res, next) => {
           },
         },
       },
+    },
+    {
+      $unset: "createdBy.password", // Exclude the password field from the output
     },
     {
       $sort: sortBy,
@@ -157,9 +171,9 @@ exports.getAllSuggestedProducts = catchAsync(async (req, res, next) => {
 // });
 
 exports.createProduct = catchAsync(async (req, res, next) => {
-  const { title, category, detail } = req.body;
+  const { title, category, detail, createdBy } = req.body;
 
-  if (!title || !category || !detail) {
+  if (!title || !category || !detail || !createdBy) {
     return next(
       new AppError("Either title, category or detail is missing", 400)
     );
@@ -169,6 +183,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     title,
     category,
     description: detail,
+    createdBy,
   });
 
   res.status(201).json({
@@ -222,6 +237,10 @@ exports.findProduct = catchAsync(async (req, res, next) => {
         },
       ],
     })
+    .populate({
+      path: "createdBy",
+      select: "-__v",
+    })
     .select("-__v");
 
   if (!product) {
@@ -269,17 +288,40 @@ exports.deleteProduct = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.increaseUpvotes = catchAsync(async (req, res, next) => {
-  const product = await Product.findById(req.query.id);
-  if (!product) {
-    return next(new AppError("A product with that ID was not found", 404));
+exports.upvoteFeedback = catchAsync(async (req, res, next) => {
+  const feedbackId = req.query.id;
+
+  const user = await User.findById(req.body.user);
+
+  // Check if the user has already upvoted the feedback
+  const index = user.upvotedFeedbacks.indexOf(feedbackId);
+  if (index !== -1) {
+    // If the user has already upvoted the feedback, remove their upvote (downvote)
+    user.upvotedFeedbacks.splice(index, 1);
+
+    // Update the upvotes count for the feedback (downvote)
+    await Product.findByIdAndUpdate(feedbackId, { $inc: { upvotes: -1 } });
+  } else {
+    // If the user has not upvoted the feedback before, upvote it
+    // Update the upvotes count for the feedback (upvote)
+    await Product.findByIdAndUpdate(feedbackId, { $inc: { upvotes: 1 } });
+
+    // Add the feedback's ID to the user's list of upvoted feedbacks
+    user.upvotedFeedbacks.push(feedbackId);
   }
-  product.upvotes += 1;
-  await product.save();
+
+  await user.save({
+    validateBeforeSave: false,
+  });
+
+  // Retrieve the updated feedback
+  const updatedFeedback = await Product.findById(feedbackId);
+
   res.status(200).json({
     status: "success",
     data: {
-      product,
+      product: updatedFeedback,
     },
+    user,
   });
 });

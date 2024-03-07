@@ -12,8 +12,11 @@ import { usePostComment } from "./usePostComment";
 import { useGetFeedback } from "./useGetFeedback";
 import Loader from "../../ui/Loader";
 import { useIncreaseUpvotes } from "../HomePage/useIncreaseUpvotes";
+import Cookies from "js-cookie";
 
 function FeedbackDetail() {
+  const currentUserId = Cookies.get("userId");
+
   const { postReply, isReplying } = usePostReply();
   const { postComment, isCommenting } = usePostComment();
   const { getFeedback, isGettingFeedback } = useGetFeedback();
@@ -34,7 +37,7 @@ function FeedbackDetail() {
     e.preventDefault();
     if (commentText.length < 3) return;
     postComment(
-      { id: feedbackId!, comment: commentText },
+      { id: feedbackId!, comment: commentText, userId: currentUserId! },
       {
         onSuccess: () => {
           setCommentText("");
@@ -49,7 +52,17 @@ function FeedbackDetail() {
     }
   }, [getFeedback, navigate, isGettingFeedback]);
 
+  useEffect(() => {
+    if (!currentUserId) navigate("/signup");
+  });
+
+  console.log(getFeedback);
+
   if (isGettingFeedback) return <Loader />;
+
+  const createdBy = getFeedback?.createdBy?._id;
+  const userUpvotes = Cookies.get("userUpvotes");
+  const isUpvoted = userUpvotes!.includes(getFeedback?._id);
 
   return (
     <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[82rem] flex-col justify-center gap-[2.4rem] py-8 tablet:grid-cols-[auto_1fr_auto] tablet:px-8">
@@ -59,23 +72,31 @@ function FeedbackDetail() {
       <div className="flex items-center justify-between">
         <NavigateBack />
 
-        <Link
-          to={`/edit-feedback/${feedbackId}`}
-          className="rounded-[1rem] bg-[#4661e6] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe] tablet:px-[1.6rem] tablet:text-[1.3rem]"
-        >
-          Edit Feedback
-        </Link>
+        {currentUserId === createdBy ? (
+          <Link
+            to={`/edit-feedback/${feedbackId}`}
+            className="rounded-[1rem] bg-[#4661e6] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe] tablet:px-[1.6rem] tablet:text-[1.3rem]"
+          >
+            Edit Feedback
+          </Link>
+        ) : (
+          <p className="text-[1.4rem] font-bold tracking-[-0.0194rem] text-[#3a4374] tablet:text-[1.3rem] tablet:tracking-[-0.0181rem]">
+            Created By: {createdBy || "Toyan"}
+          </p>
+        )}
       </div>
 
       <div className="group grid cursor-pointer grid-cols-[auto_1fr_auto] gap-16 rounded-[1rem] bg-white px-[3.2rem] py-[2.8rem] tablet:px-[2.4rem]">
         <button
-          className="flex flex-col items-center self-start rounded-[1rem] bg-[#f2f4fe] p-4 text-[#4661e6] transition-all duration-300 hover:bg-[#cfd7ff] tablet:col-start-1 tablet:row-start-2 tablet:flex-row tablet:gap-3"
+          className={`flex flex-col items-center self-start rounded-[1rem] p-4 transition-all duration-300 tablet:col-start-1 tablet:row-start-2 tablet:flex-row tablet:gap-3  ${isUpvoted ? "bg-[#4661e6] text-white" : "bg-[#f2f4fe] text-[#4661e6] hover:bg-[#cfd7ff]"}`}
           onClick={() => {
-            increaseUpvotes(feedbackId!);
+            increaseUpvotes({ id: feedbackId!, user: currentUserId! });
           }}
         >
           <IoIosArrowUp size={"2rem"} />
-          <p className="text-[1.3rem] font-bold tracking-[-0.0181rem] text-[#3a4374]">
+          <p
+            className={`text-[1.3rem] font-bold tracking-[-0.0181rem] ${isUpvoted ? "text-white" : "text-[#3a4374]"}`}
+          >
             {getFeedback?.upvotes}
           </p>
         </button>

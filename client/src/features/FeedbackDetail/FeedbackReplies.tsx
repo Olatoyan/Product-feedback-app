@@ -8,6 +8,9 @@ import TransparentLoader from "../../ui/TransparentLoader";
 import EditPost from "./EditPost";
 import DeleteModal from "./DeleteModal";
 import { TbDotsVertical } from "react-icons/tb";
+import Cookies from "js-cookie";
+
+import { FaUserLarge } from "react-icons/fa6";
 
 function FeedbackReplies({
   reply,
@@ -23,7 +26,7 @@ function FeedbackReplies({
   postReply: UseMutateFunction<
     unknown,
     Error,
-    { comment: string; id: string; username: string },
+    { comment: string; id: string; username: string; userId: string },
     unknown
   >;
 }) {
@@ -62,15 +65,27 @@ function FeedbackReplies({
     setOpenEditForm(false);
   }
 
+  const currentUserId = Cookies.get("userId");
+
+  console.log(reply);
+  const isSameUser = reply.user._id;
+
   return (
     <div className="relative flex w-[90%] flex-col">
       {(isDeletingReply || isEditingReply) && <TransparentLoader />}
       <div className="grid grid-cols-[auto_1fr_auto] gap-x-[3.2rem] gap-y-[1.7rem] tablet:gap-x-[1.6rem]">
-        <img
-          src={reply.user.image}
-          alt={`image of ${reply.user.username}`}
-          className="h-[4rem] w-[4rem] rounded-full"
-        />
+        {reply?.user?.image ? (
+          <img
+            src={reply.user.image}
+            alt={`image of ${reply.user.username}`}
+            className="h-[4rem] w-[4rem] rounded-full"
+          />
+        ) : (
+          <FaUserLarge
+            className="h-[4rem] w-[4rem] rounded-full"
+            color="#647196"
+          />
+        )}
 
         <div className="flex flex-col">
           <h2 className="text-[1.4rem] font-bold tracking-[-0.0194rem] text-[#3a4374] tablet:text-[1.3rem] tablet:tracking-[-0.0181rem]">
@@ -81,36 +96,45 @@ function FeedbackReplies({
           </p>
         </div>
 
-        <div className="flex tablet:relative">
-          <div
-            className={`flex items-center gap-4 tablet:absolute tablet:left-[-10.5rem] tablet:top-0 tablet:flex-col tablet:items-start tablet:rounded-[1rem] tablet:bg-white tablet:px-12 tablet:py-4 tablet:shadow-modal-sh ${openMobileModal ? "tablet:flex" : "tablet:hidden"}`}
-          >
-            <button
-              className="text-[1.3rem] font-semibold text-[#d73737] hover:underline"
-              onClick={handleOpenModal}
+        {currentUserId === isSameUser ? (
+          <div className="flex tablet:relative">
+            <div
+              className={`flex items-center gap-4 tablet:absolute tablet:left-[-10.5rem] tablet:top-0 tablet:flex-col tablet:items-start tablet:rounded-[1rem] tablet:bg-white tablet:px-12 tablet:py-4 tablet:shadow-modal-sh ${openMobileModal ? "tablet:flex" : "tablet:hidden"}`}
             >
-              Delete
-            </button>
+              <button
+                className="text-[1.3rem] font-semibold text-[#d73737] hover:underline"
+                onClick={handleOpenModal}
+              >
+                Delete
+              </button>
+              <button
+                className="text-[1.3rem] font-semibold text-[#647196] hover:underline"
+                onClick={handleOpenEditForm}
+              >
+                Edit
+              </button>
+              <button
+                className="text-[1.3rem] font-semibold text-[#4661e6] hover:underline"
+                onClick={handleReply}
+              >
+                Reply
+              </button>
+            </div>
             <button
-              className="text-[1.3rem] font-semibold text-[#647196] hover:underline"
-              onClick={handleOpenEditForm}
+              className="hidden tablet:block"
+              onClick={() => setOpenMobileModal((prev) => !prev)}
             >
-              Edit
-            </button>
-            <button
-              className="text-[1.3rem] font-semibold text-[#4661e6] hover:underline"
-              onClick={handleReply}
-            >
-              Reply
+              <TbDotsVertical size="2rem" />
             </button>
           </div>
+        ) : (
           <button
-            className="hidden tablet:block"
-            onClick={() => setOpenMobileModal((prev) => !prev)}
+            className="text-[1.3rem] font-semibold text-[#4661e6] hover:underline"
+            onClick={handleReply}
           >
-            <TbDotsVertical size="2rem" />
+            Reply
           </button>
-        </div>
+        )}
 
         {openEditForm ? (
           <EditPost

@@ -1,6 +1,72 @@
-// const BASE_URL = "http://127.0.0.1:5000/product-api/user";
-const BASE_URL =
-  "https://toyan-product-feedback-app-api.vercel.app/product-api/user";
+const BASE_URL = "http://127.0.0.1:5000/product-api/user";
+// const BASE_URL =
+//   "https://toyan-product-feedback-app-api.vercel.app/product-api/user";
+
+import Cookie from "js-cookie";
+
+export async function signupApi({
+  name,
+  username,
+  password,
+  confirmPassword,
+}: {
+  name: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
+}) {
+  try {
+    const response = await fetch(`${BASE_URL}/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, username, password, confirmPassword }),
+    });
+    console.log(response);
+    const data = await response.json();
+    console.log(data);
+    if (data.status === "fail") {
+      throw new Error(data.message);
+    }
+    Cookie.set("token", data.token);
+    Cookie.set("userId", data.data.user._id);
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function loginApi({
+  username,
+  password,
+}: {
+  username: string;
+  password: string;
+}) {
+  try {
+    const response = await fetch(`${BASE_URL}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    });
+    console.log(response);
+    const data = await response.json();
+    console.log(data);
+    if (data.status === "fail") {
+      throw new Error(data.message);
+    }
+    Cookie.set("token", data.token);
+    Cookie.set("userId", data.data.user._id);
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
 
 export async function getAllFeedbacksApi() {
   try {
@@ -129,10 +195,12 @@ export async function postReplyApi({
   id,
   comment,
   username,
+  userId,
 }: {
   id: string;
   comment: string;
   username: string;
+  userId: string;
 }) {
   try {
     const response = await fetch(`${BASE_URL}/replyComment`, {
@@ -140,7 +208,7 @@ export async function postReplyApi({
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ comment, id, username }),
+      body: JSON.stringify({ comment, id, username, userId }),
     });
     const data = await response.json();
 
@@ -153,9 +221,11 @@ export async function postReplyApi({
 export async function postCommentApi({
   id,
   comment,
+  userId,
 }: {
   id: string;
   comment: string;
+  userId: string;
 }) {
   try {
     const response = await fetch(`${BASE_URL}/createComment`, {
@@ -163,7 +233,7 @@ export async function postCommentApi({
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ comment, id }),
+      body: JSON.stringify({ comment, id, userId }),
     });
     const data = await response.json();
 
@@ -174,17 +244,25 @@ export async function postCommentApi({
   }
 }
 
-export async function increaseUpvotesApi(id: string) {
+export async function increaseUpvotesApi({
+  id,
+  user,
+}: {
+  id: string;
+  user: string;
+}) {
   try {
-    const response = await fetch(`${BASE_URL}/increaseUpvotes?id=${id}`, {
+    const response = await fetch(`${BASE_URL}/upvoteFeedback?id=${id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({ user }),
     });
 
     const data = await response.json();
-
+    console.log(data);
+    Cookie.set("userUpvotes", JSON.stringify(data.user.upvotedFeedbacks));
     return data;
   } catch (error) {
     console.error(error);
@@ -258,6 +336,7 @@ export async function editReplyApi({
       body: JSON.stringify({ id, comment }),
     });
     const data = await response.json();
+
     return data;
   } catch (error) {
     console.error(error);

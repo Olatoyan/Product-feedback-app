@@ -6,11 +6,7 @@ const catchAsync = require("../utils/catchAsync");
 const Comment = require("./../models/commentModel");
 
 exports.createComment = catchAsync(async (req, res, next) => {
-  const users = await User.find();
-
-  const randomUser = users[Math.floor(Math.random() * users.length)];
-
-  const { comment, id } = req.body;
+  const { comment, id, userId } = req.body;
 
   const product = await Product.findById(id);
 
@@ -24,7 +20,7 @@ exports.createComment = catchAsync(async (req, res, next) => {
 
   const newComment = await Comment.create({
     content: comment,
-    user: randomUser._id,
+    user: userId,
   });
 
   product.comments.push(newComment._id);

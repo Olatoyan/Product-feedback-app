@@ -5,22 +5,14 @@ const User = require("../models/userModel");
 const Comment = require("../models/commentModel");
 
 exports.replyComment = catchAsync(async (req, res, next) => {
-  const { comment, id, username } = req.body;
-
-  const users = await User.find();
-
-  if (!users.length) {
-    return next(new AppError("No users found in the database", 404));
-  }
-
-  const randomUser = users[Math.floor(Math.random() * users.length)];
+  const { comment, id, username, userId } = req.body;
 
   const findComment = await Comment.findById(id);
 
   const reply = await Reply.create({
     content: comment,
     replyingTo: username,
-    user: randomUser._id,
+    user: userId,
   });
 
   findComment.replies.push(reply._id);

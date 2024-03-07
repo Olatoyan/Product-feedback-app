@@ -3,8 +3,13 @@ import { IoIosArrowUp } from "react-icons/io";
 import { productType } from "../../types/types";
 import { useIncreaseUpvotes } from "../HomePage/useIncreaseUpvotes";
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 
 function RoadmapStatusBox({ data }: { data: productType }) {
+  const currentUserId = Cookies.get("userId");
+  const userUpvotes = Cookies.get("userUpvotes");
+  const isUpvoted = userUpvotes!.includes(data._id);
+
   const { increaseUpvotes, isIncreasing } = useIncreaseUpvotes();
   return (
     <Link
@@ -32,16 +37,18 @@ function RoadmapStatusBox({ data }: { data: productType }) {
 
       <div className="flex items-center justify-between pt-[1.6rem]">
         <button
-          className="flex items-center gap-3 self-start rounded-[1rem] bg-[#f2f4fe] p-4 text-[#4661e6] transition-all duration-300 hover:bg-[#cfd7ff] disabled:bg-[#ccc]"
+          className={`flex items-center gap-3 self-start rounded-[1rem] p-4 transition-all duration-300  disabled:bg-[#ccc] ${isUpvoted ? "bg-[#4661e6] text-white" : "bg-[#f2f4fe] text-[#4661e6] hover:bg-[#cfd7ff]"}`}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            increaseUpvotes(data._id);
+            increaseUpvotes({ id: data._id, user: currentUserId! });
           }}
           disabled={isIncreasing}
         >
           <IoIosArrowUp size={"2rem"} />
-          <p className="text-[1.3rem] font-bold tracking-[-0.0181rem] text-[#3a4374]">
+          <p
+            className={`text-[1.3rem] font-bold tracking-[-0.0181rem] ${isUpvoted ? "text-white" : "text-[#3a4374]"}`}
+          >
             {data.upvotes}
           </p>
         </button>

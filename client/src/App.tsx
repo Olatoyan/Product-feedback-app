@@ -1,13 +1,11 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Navigate, Route, Routes } from "react-router-dom";
-// import HomePage from "./features/HomePage/HomePage";
-// import CreateFeedback from "./features/HomePage/CreateFeedback";
-// import EditFeedback from "./features/FeedbackDetail/EditFeedback";
-// import FeedbackDetail from "./features/FeedbackDetail/FeedbackDetail";
-// import RoadmapPage from "./features/Roadmap/RoadmapPage";
+import { Toaster } from "react-hot-toast";
 import { Suspense, lazy } from "react";
 import Loader from "./ui/Loader";
+import Signup from "./authentication/Signup";
+import Login from "./authentication/Login";
 
 const HomePage = lazy(() => import("./features/HomePage/HomePage"));
 const CreateFeedback = lazy(() => import("./features/HomePage/CreateFeedback"));
@@ -41,10 +39,29 @@ function App() {
             element={<FeedbackDetail />}
           />
           <Route path="roadmap" element={<RoadmapPage />} />
+          <Route path="signup" element={<Signup />} />
+          <Route path="login" element={<Login />} />
 
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
       </Suspense>
+
+      <Toaster
+        position="top-center"
+        gutter={12}
+        containerStyle={{ margin: "8px" }}
+        toastOptions={{
+          success: { duration: 3000 },
+          error: { duration: 5000 },
+          style: {
+            fontSize: "16px",
+            maxWidth: "500px",
+            padding: "16px 24px",
+            backgroundColor: "#fff",
+            color: "#0c0e16",
+          },
+        }}
+      />
     </QueryClientProvider>
   );
 }
