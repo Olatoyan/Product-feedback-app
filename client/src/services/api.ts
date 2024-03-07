@@ -60,7 +60,6 @@ export async function loginApi({
       throw new Error(data.message);
     }
 
-    console.log(data);
     Cookie.set("token", data?.token);
     Cookie.set("userId", data?.data?.user?._id);
     Cookie.set("userUpvotes", JSON.stringify(data.data.user.upvotedFeedbacks));
@@ -157,7 +156,6 @@ export async function createFeedBackApi({
   detail: string;
   createdBy: string;
 }) {
-  console.log(title, category, detail);
   try {
     const response = await fetch(`${BASE_URL}/createProduct`, {
       method: "POST",
@@ -167,9 +165,7 @@ export async function createFeedBackApi({
       body: JSON.stringify({ title, category, detail, createdBy }),
     });
 
-    console.log(response);
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error(error);
