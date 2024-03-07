@@ -150,22 +150,26 @@ export async function createFeedBackApi({
   title,
   category,
   detail,
+  createdBy,
 }: {
   title: string;
   category: string;
   detail: string;
+  createdBy: string;
 }) {
+  console.log(title, category, detail);
   try {
     const response = await fetch(`${BASE_URL}/createProduct`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ title, category, detail }),
+      body: JSON.stringify({ title, category, detail, createdBy }),
     });
 
+    console.log(response);
     const data = await response.json();
-
+    console.log(data);
     return data;
   } catch (error) {
     console.error(error);

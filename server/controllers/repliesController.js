@@ -44,13 +44,19 @@ exports.editReply = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteReply = catchAsync(async (req, res, next) => {
-  const reply = await Reply.findById(req.query.id);
+  const replyId = req.query.id;
+  const reply = await Reply.findById(replyId);
 
   if (!reply) {
     return next(new AppError("A reply with that ID was not found", 404));
   }
 
   await Reply.deleteOne({ _id: reply._id });
+
+  await Comment.updateMany(
+    { replies: replyId },
+    { $pull: { replies: replyId } }
+  );
 
   res.status(204).json({
     status: "success",

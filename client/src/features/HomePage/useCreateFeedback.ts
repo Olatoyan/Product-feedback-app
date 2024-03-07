@@ -8,8 +8,12 @@ export function useCreateFeedback() {
 
   const { mutate: createFeedback, isPending: isCreatingFeedback } = useMutation(
     {
-      mutationFn: (data: { title: string; category: string; detail: string }) =>
-        createFeedBackApi(data),
+      mutationFn: (data: {
+        title: string;
+        category: string;
+        detail: string;
+        createdBy: string;
+      }) => createFeedBackApi(data),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["getSuggestedFeedbacks"] });
         navigate("/");

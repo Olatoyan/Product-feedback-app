@@ -41,6 +41,7 @@ function CreateFeedback() {
       title: data.title,
       category,
       detail: data.detail,
+      createdBy: currentUserId!,
     });
   }
 

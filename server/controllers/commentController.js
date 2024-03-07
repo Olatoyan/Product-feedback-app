@@ -55,17 +55,25 @@ exports.editComment = catchAsync(async (req, res, next) => {
 exports.deleteComment = catchAsync(async (req, res, next) => {
   const comment = await Comment.findById(req.query.id).populate("replies");
 
-  console.log(comment);
-
   if (!comment) {
     return next(new AppError("A comment with that ID was not found", 404));
   }
+
+  const feedback = await Product.findOne({ comments: comment._id });
+
+  if (!feedback) {
+    return next(new AppError("Associated product feedback not found", 404));
+  }
+
+  feedback.comments.pull(comment._id);
 
   for (const reply of comment.replies) {
     await Reply.deleteOne({ _id: reply._id });
   }
 
   await Comment.deleteOne({ _id: comment._id });
+
+  await feedback.save();
 
   res.status(204).json({
     status: "success",

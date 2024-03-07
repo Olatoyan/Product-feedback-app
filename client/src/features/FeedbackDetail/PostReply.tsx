@@ -31,6 +31,7 @@ function PostReply({
       {
         onSuccess: () => {
           onOpenReply("");
+          setValueText("");
         },
       },
     );
