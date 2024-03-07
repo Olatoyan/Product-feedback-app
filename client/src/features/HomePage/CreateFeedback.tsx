@@ -1,11 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FaCheck } from "react-icons/fa6";
 import { useCreateFeedback } from "./useCreateFeedback";
 import TransparentLoader from "../../ui/TransparentLoader";
 import NavigateBack from "../../ui/NavigateBack";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 type feedbackState = {
   title: string;
@@ -13,6 +14,8 @@ type feedbackState = {
 };
 
 function CreateFeedback() {
+  const currentUserId = Cookies.get("userId") ?? "";
+
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [category, setCategory] = useState("Feature");
 
@@ -40,6 +43,10 @@ function CreateFeedback() {
       detail: data.detail,
     });
   }
+
+  useEffect(() => {
+    if (!currentUserId) navigate("/login");
+  }, [currentUserId, navigate]);
 
   return (
     <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[58rem] flex-col justify-center px-8 py-8">
