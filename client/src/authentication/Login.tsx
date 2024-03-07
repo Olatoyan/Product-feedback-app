@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
-import NavigateBack from "../ui/NavigateBack";
 import { Link, useNavigate } from "react-router-dom";
 import { useLogin } from "./useLogin";
 import TransparentLoader from "../ui/TransparentLoader";
+import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 
 type feedbackState = {
   username: string;
@@ -23,7 +23,13 @@ function Login() {
 
   return (
     <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[58rem] flex-col justify-center px-8 py-8">
-      <NavigateBack />
+      <div
+        className={`tablet:text-[1.3rem flex cursor-pointer items-center gap-2 text-[1.4rem] font-bold text-[#647196] hover:underline`}
+        onClick={() => navigate("/")}
+      >
+        <MdOutlineKeyboardArrowLeft size={"2rem"} />
+        <span>Go Back</span>
+      </div>
 
       <form
         className="mt-28 rounded-[1rem] bg-white p-16 tablet:mt-20 tablet:px-[2.4rem]"
