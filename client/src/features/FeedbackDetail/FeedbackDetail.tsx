@@ -15,7 +15,7 @@ import { useIncreaseUpvotes } from "../HomePage/useIncreaseUpvotes";
 import Cookies from "js-cookie";
 
 function FeedbackDetail() {
-  const currentUserId = Cookies.get("userId");
+  const currentUserId = Cookies.get("userId") ?? "";
 
   const { postReply, isReplying } = usePostReply();
   const { postComment, isCommenting } = usePostComment();
@@ -61,7 +61,7 @@ function FeedbackDetail() {
   if (isGettingFeedback) return <Loader />;
 
   const createdBy = getFeedback?.createdBy?._id;
-  const userUpvotes = Cookies.get("userUpvotes");
+  const userUpvotes = Cookies.get("userUpvotes") || '';
   const isUpvoted = userUpvotes?.includes(getFeedback?._id);
 
   return (

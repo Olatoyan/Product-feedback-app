@@ -65,10 +65,8 @@ function FeedbackComments({
     setOpenEditForm(false);
   }
 
-  const currentUserId = Cookies.get("userId");
+  const currentUserId = Cookies.get("userId") || "";
 
-  console.log(currentUserId);
-  console.log(comment);
   const isSameUser = comment.user._id;
 
   return (

@@ -65,7 +65,7 @@ function FeedbackReplies({
     setOpenEditForm(false);
   }
 
-  const currentUserId = Cookies.get("userId");
+  const currentUserId = Cookies.get("userId") || "";
 
   console.log(reply);
   const isSameUser = reply.user._id;

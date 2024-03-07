@@ -22,7 +22,7 @@ function PostReply({
   id: string;
   username: string;
 }) {
-  const currentUserId = Cookies.get("userId");
+  const currentUserId = Cookies.get("userId") ?? "";
 
   function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
