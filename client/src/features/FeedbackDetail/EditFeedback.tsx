@@ -332,7 +332,7 @@ function EditFeedback() {
               Delete
             </button>
 
-            <div className="flex items-center gap-8 tablet:flex-col tablet:items-stretch tablet:gap-[1.6rem]">
+            <div className="flex items-center gap-8 tablet:-order-1 tablet:flex-col tablet:items-stretch tablet:gap-[1.6rem]">
               <button
                 type="button"
                 className="rounded-[1rem] bg-[#3a4374] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe] transition-all duration-300 hover:bg-[#656ea3] tablet:text-[1.3rem]"
@@ -346,7 +346,7 @@ function EditFeedback() {
 
               <button
                 type="submit"
-                className="rounded-[1rem] bg-[#ad1fea] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe] transition-all duration-300 hover:bg-[#c75af6] tablet:text-[1.3rem]"
+                className="rounded-[1rem] bg-[#ad1fea] px-[2.4rem] py-[1.2rem] text-[1.4rem] font-bold text-[#f2f4fe] transition-all duration-300 hover:bg-[#c75af6] tablet:-order-1 tablet:text-[1.3rem]"
               >
                 Edit Feedback
               </button>
