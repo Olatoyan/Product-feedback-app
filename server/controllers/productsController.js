@@ -33,8 +33,12 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
 
 exports.getAllSuggestedProducts = catchAsync(async (req, res, next) => {
   const matchStage = { status: "suggestion" };
+
   if (req.query.category && req.query.category !== "all") {
-    matchStage.category = req.query.category;
+    const lowercaseCategory = req.query.category.toLowerCase();
+    matchStage.category = {
+      $regex: new RegExp("^" + lowercaseCategory + "$", "i"),
+    };
   }
 
   let sortBy = {};
